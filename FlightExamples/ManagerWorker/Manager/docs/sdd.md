@@ -5,6 +5,7 @@ A manager component that leverages a worker component to do work. Designed as an
 | Pattern                  |
 |--------------------------|
 | Manager / Worker Pattern |
+| Health Checking          |
 
 
 ## Usage
