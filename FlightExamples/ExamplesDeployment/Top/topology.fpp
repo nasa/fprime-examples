@@ -132,6 +132,7 @@ module ExamplesDeployment {
       frameAccumulator.bufferAllocate -> bufferManager.bufferGetCallee
       frameAccumulator.frameOut -> deframer.framedIn
       deframer.deframedOut -> fprimeRouter.dataIn
+      deframer.bufferDeallocate -> bufferManager.bufferSendIn
 
       fprimeRouter.commandOut -> cmdDisp.seqCmdBuff
       fprimeRouter.fileOut -> fileUplink.bufferSendIn
