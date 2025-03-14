@@ -1,6 +1,6 @@
-# ExternalLibraryIntegration::OpenSslWrapper
+# ExternalLibraryIntegration::OpenCvWrapper
 
-The OpenSslWrapper component provides a wrapper around the OpenSSL library and exposes the library's functionality to the rest of the F´ application.
+The OpenCvWrapper component provides a wrapper around the OpenCv library and exposes the library's functionality to the rest of the F´ application.
 
 ## Usage Examples
 

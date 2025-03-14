@@ -47,6 +47,8 @@ module ExamplesDeployment {
     instance rateGroupDriver
     instance textLogger
     instance systemResources
+    instance openSslWrapper
+    instance openCvWrapper
 
     # ----------------------------------------------------------------------
     # Pattern graph specifiers

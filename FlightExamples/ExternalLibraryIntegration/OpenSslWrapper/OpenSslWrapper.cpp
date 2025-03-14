@@ -18,6 +18,7 @@ namespace ExternalLibraryIntegration {
   {
     EVP_CIPHER_CTX* ctx = EVP_CIPHER_CTX_new();
     EVP_CIPHER_CTX_free(ctx);
+    printf("AAAAAAAAAADDDD OpenSSL That worked!!!\n");
   }
 
   OpenSslWrapper ::
