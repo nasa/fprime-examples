@@ -8,3 +8,4 @@ This orchestration of components is instantiated in the [ExamplesDeployment](../
 |--------------------------|
 | Manager / Worker Pattern |
 | Synchronous Cancel Port  |
+| Health Checking          |
