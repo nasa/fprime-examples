@@ -6,7 +6,7 @@
 # UT_SOURCE_FILES: list of source files for unit tests
 #
 # More information in the F´ CMake API documentation:
-# https://fprime.jpl.nasa.gov/latest/documentation/reference
+# https://fprime.jpl.nasa.gov/latest/docs/reference
 #
 ####
 
@@ -37,7 +37,8 @@ ExternalProject_Add(
 set(MOD_DEPS
   OpenSSL # dependency on the above-defined OpenSSL library - without this line openssl_lib will not be built
   ${OPENSSL_INSTALL_DIR}/lib/libcrypto.a # dependency on the actual library file needed for linking
-)
+  etl::etl
+  )
 
 register_fprime_module()
 target_include_directories(${FPRIME_CURRENT_MODULE} PUBLIC "${OPENSSL_INCLUDE_DIR}")

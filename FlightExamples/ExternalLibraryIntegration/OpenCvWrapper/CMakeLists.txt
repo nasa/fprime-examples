@@ -6,7 +6,7 @@
 # UT_SOURCE_FILES: list of source files for unit tests
 #
 # More information in the F´ CMake API documentation:
-# https://fprime.jpl.nasa.gov/latest/documentation/reference
+# https://fprime.jpl.nasa.gov/latest/docs/reference
 #
 ####
 
@@ -19,13 +19,9 @@ set(SOURCE_FILES
 # Follow https://docs.opencv.org/4.11.0/d0/d3d/tutorial_general_install.html
 find_package(OpenCV REQUIRED)
 
-
-message("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
-message("OpenCV_INCLUDE_DIRS: ${OpenCV_INCLUDE_DIRS}")
-message("OpenCV_LIBS: ${OpenCV_LIBS}")
-
 set(MOD_DEPS
   ${OpenCV_LIBS}
+  etl::etl
 )
 
 register_fprime_module()

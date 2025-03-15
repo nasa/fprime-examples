@@ -1,70 +1,156 @@
-# How-To: Integrate an external Library
+# How-To: Integrate an external Library into your F´ Project
+
+> [!IMPORTANT]
+> For this How-To guide and many other advanced F´ CMake use cases, it is recommended to have a basic understanding of CMake. If you are unfamiliar with CMake, please refer to the [CMake documentation](https://cmake.org/getting-started/). They provide a [great tutorial to get you started](https://cmake.org/cmake/help/latest/guide/tutorial/index.html).
 
 > [!TIP]
-> For this How-To guide and many other advanced F´ CMake use cases, it is recommended to have a basic understanding of CMake. If you are unfamiliar with CMake, please refer to the [CMake documentation](https://cmake.org/getting-started/). They provide a [great tutorial to get you started](https://cmake.org/cmake/help/latest/guide/tutorial/index.html).
+> CMake also provides a [Using Dependencies Guide](https://cmake.org/cmake/help/v3.31/guide/using-dependencies/index.html) which we recommend reading for a deeper understanding of how to integrate dependencies into your CMake projects.
 
 It is common practice to use third-party libraries in F´ projects. CMake provides multiple ways to integrate external libraries into a project, and the F´ build system facilitates it even further. This document will cover the different ways to integrate external libraries into your F´ project.
 
-Each section below is a different method; they are listed by order of complexity.
+Each section below is a different approach; they are listed by order of complexity.
 
 > [!NOTE]
 > The source code for the examples shown in this guide can be found in our examples repo here: [https://github.com/nasa/fprime-examples/tree/devel/FlightExamples/ExternalLibraryIntegration](https://github.com/nasa/fprime-examples/tree/devel/FlightExamples/ExternalLibraryIntegration)
 
 
-## Pre-compiled Libraries
+## Approach 1: Pre-compiled library files
+
+|     |     |
+| --- | --- |
+| **Benefits** | Easy to set up; no additional build time |
+| **Drawbacks** | Not be portable across platforms |
+| **Considerations** | May be provided by a vendor or third-party |
 
 A pre-compiled library is a library that has already been compiled and is ready to be used, often named `lib<libName>.a` or `lib<libName>.so`. There are many ways to obtain pre-compiled libraries, such as downloading them from a package manager or building them from source yourself.
 
-To integrate a pre-compiled library, you need to add the path of that library to `MOD_DEPS` of the module(s) that depend on it (MOD_DEPS: module dependencies). The following example demonstrates how to integrate a the OpenSSL `libcrypto` library into an F´ wrapper component:
+To integrate a pre-compiled library, you need to add the path of that library file to `MOD_DEPS` of the module(s) that depend on it (MOD_DEPS: module dependencies). The following example demonstrates how to integrate a the OpenSSL `libcrypto` library into an F´ wrapper component:
 
 ```cmake
 set(SOURCE_FILES
-  "${CMAKE_CURRENT_LIST_DIR}/OpenSslWrapper.fpp"
-  "${CMAKE_CURRENT_LIST_DIR}/OpenSslWrapper.cpp"
+    "${CMAKE_CURRENT_LIST_DIR}/OpenSslWrapper.fpp"
+    "${CMAKE_CURRENT_LIST_DIR}/OpenSslWrapper.cpp"
 )
-set(OPENSSL_CRYPTO_LIB_PATH "${FPRIME_PROJECT_ROOT}/lib/libssl/libcrypto.a")
 set(MOD_DEPS
-  ${OPENSSL_CRYPTO_LIB_PATH}
+    ${FPRIME_PROJECT_ROOT}/lib/openssl/libcrypto.a
 )
-
 register_fprime_module()
+target_include_directories(${FPRIME_CURRENT_MODULE} PUBLIC "${FPRIME_PROJECT_ROOT}/lib/openssl/include")
 ```
 
-The necessary headers to be included should be added under the libraries include directory, under `<FPRIME_PROJECT_ROOT>/lib/include`. This path is automatically added to the include directories by F´ at the project level.
+This assumes that the `libcrypto.a` is available in the `lib/libssl/` directory of your F´ project root, and that the necessary header files are in `lib/libssl/include/`.
 
 An example of the OpenSslWrapper component using this pre-compiled approach is shown here: [https://github.com/nasa/fprime-examples/tree/devel/FlightExamples/ExternalLibraryIntegration/OpenSslWrapper](https://github.com/nasa/fprime-examples/tree/devel/FlightExamples/ExternalLibraryIntegration/OpenSslWrapper)
 
-## Source Code Libraries
 
 If you have the source code for a library, multiple methods can be used to integrate it into your project. 
 
-### Existing CMake Project: FetchContent
+## Approach 2: CMake library available through the FetchContent module
 
-Many popular libraries are available as CMake projects, and the easiest way to integrate them is to use the `FetchContent` module. This module allows you to download and build the library as part of your project.
-The following code demonstrates how to integrate the popular OpenCV library using `FetchContent`:
+|     |     |
+| --- | --- |
+| **Benefits** | Very easy to set up; portable |
+| **Drawbacks** | May not handle transitive dependencies |
+| **Considerations** | Go-to solution if available |
+
+
+Many popular libraries are available through the [FetchContent module](https://cmake.org/cmake/help/v3.31/module/FetchContent.html) for very simple integration. This module allows you to download and build the library as part of your project.
+
+> [!IMPORTANT]
+> Just because a library is built by CMake does not mean it is compatible with `FetchContent`. OpenCV, for example, is not compatible with `FetchContent` (as of March 2025). In such cases, you will need to use `find_package()` or `ExternalProject_Add` as described in the sections below.
+
+
+##### Step 1: Use FetchContent to include the library in your project.
+
+This can be done either
+  (a) in the root `project.cmake` file if multiple modules will depend on the library, OR 
+  (b) in a `CMakeLists.txt` of the module that needs the library file if the library is only used by one module.
+
+The following excerpt demonstrates how to integrate the [ETL libraries](https://github.com/ETLCPP/etl) using `FetchContent`:
 
 ```cmake
+# This code can be located in the root project.cmake file if the library is used by multiple modules
+# or directly in the module's CMakeLists.txt if it is only used by that module.
 include(FetchContent)
 FetchContent_Declare(
-  OpenCV
-  GIT_REPOSITORY https://github.com/opencv/opencv.git
-  GIT_TAG 4.5.1
+    etl
+    GIT_REPOSITORY https://github.com/ETLCPP/etl
+    GIT_TAG        20.40.0
 )
-FetchContent_MakeAvailable(OpenCV)
+FetchContent_MakeAvailable(etl)
 ```
 
-Then, in a component's CMakeLists.txt file, you can link against the OpenCV library like this:
+In the `fprime-examples` repository, this is done at the project level in the [project.cmake](../project.cmake) file. This allows any module in the project to use the `etl` library.
+
+##### Step 2: Set the library as a dependency of the module
+
+Any component or module that depends on ETL can now link against it by adding the following entry to its `MOD_DEPS`:
 
 ```cmake
-set(MOD_DEPS
-  OpenCV
+# In MyComponent/CMakeLists.txt 
+set(SOURCE_FILES
+  "${CMAKE_CURRENT_LIST_DIR}/MyComponent.fpp"
+  "${CMAKE_CURRENT_LIST_DIR}/MyComponent.cpp"
 )
+set(MOD_DEPS
+  etl::etl   # This is the target name for the ETL library
+)
+register_fprime_module()
 ```
 
 
+## Approach 3: Install once and integrate with find_package()
+
+|     |     |
+| --- | --- |
+| **Benefits** | Somewhat easy to set-up |
+| **Drawbacks** | Additional step managed outside of CMake |
+| **Considerations** | Ensure developers will install dependency |
+
+Some libraries may not be available with [`FetchContent`](https://cmake.org/cmake/help/v3.31/module/FetchContent.html). In this case, you may choose to install the library manually on your machine and use [`find_package()`](https://cmake.org/cmake/help/v3.31/command/find_package.html) in CMake to locate it. This is a common approach for libraries that have complex build requirements.
+
+##### Step 1: Install the library on your system
+
+There can be many ways to install the library, such as using a package manager (e.g., `apt`, `brew`, `yum`, `conda`, etc.), or building from source. Refer to each the library installation instructions to decide which fits your project best.
+
+##### Step 2: Use find_package() to locate the library
+
+CMake can be surprisingly good at locating libraries on your system, provided they are installed in standard locations. Should you install the library in a non-standard location, you may need to set the [`CMAKE_MODULE_PATH`](https://cmake.org/cmake/help/latest/variable/CMAKE_MODULE_PATH.html) variable to point to the directory containing the library's CMake configuration files.
+
+The [OpenCvWrapper component](https://github.com/nasa/fprime-examples/tree/devel/FlightExamples/ExternalLibraryIntegration/OpenCvWrapper) component demonstrates this approach by encapsulating the OpenCV library after it has been installed through `pip`. The following code shows how to integrate the OpenCV library using `find_package()`:
+
+```cmake
+# The following requires that OpenCV is installed on the system and may need to be added to CMAKE_MODULE_PATH
+find_package(OpenCV REQUIRED)
+set(MOD_DEPS
+  ${OpenCV_LIBS}
+)
+register_fprime_module()
+target_include_directories(${FPRIME_CURRENT_MODULE} PUBLIC "${OpenCV_INCLUDE_DIRS}")
+```
+
+The `find_package()` command searches for the OpenCV library and sets the `OpenCV_LIBS` variable to the appropriate libraries. You may refer to your own library's documentation to find the correct variable names to use.  
+The `target_include_directories()` command adds the OpenCV include directories to the `FPRIME_CURRENT_MODULE`, allowing it to access the OpenCV headers.
+
+> [!IMPORTANT]
+> When using this approach, you must ensure that users of your project have the library installed on their system. This can be done by providing instructions in your project's documentation.
 
 
-### ExternalProject_Add
+## Approach 4: Build from source alongside your project with ExternalProject_Add
+
+|     |     |
+| --- | --- |
+| **Benefits** | None I can think of... |
+| **Drawbacks** | Can be very hard to set-up; builds only at project build-time |
+| **Considerations** | Sometimes it's the only way... |
+
+> [!NOTE]
+> This section is using the OpenSSL library to illustrate. However, should you need OpenSSL in your project, note that OpenSSL is also available through the find_package() API mentioned above.
+
+> [!WARNING]
+> This approach is essentially building and installing the library, from source, as part of your project. This has some downsides:
+> * A library may have dependencies that are not installed by its build process. This can lead to hard-to-debug errors for users that use different systems. As an example, on RedHat 8 the OpenSSL library can not be built without `perl-IPC-Cmd` and a few other PERL yum package.
+> * The build process may take a long time, especially for large libraries.
 
 
 
