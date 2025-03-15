@@ -19,6 +19,7 @@ include(ExternalProject)
 
 set(OPENSSL_SOURCE_DIR ${FPRIME_PROJECT_ROOT}/lib/openssl) # default path by CMake
 set(OPENSSL_INSTALL_DIR ${CMAKE_BINARY_DIR}/openssl)
+# set(OPENSSL_INSTALL_DIR ${FPRIME_PROJECT_ROOT}/lib/build/openssl)
 set(OPENSSL_INCLUDE_DIR ${OPENSSL_INSTALL_DIR}/include)
 
 ExternalProject_Add(
@@ -35,11 +36,29 @@ ExternalProject_Add(
 )
 
 set(MOD_DEPS
+  # OpenSSL dependency
   OpenSSL # dependency on the above-defined OpenSSL library - without this line openssl_lib will not be built
   ${OPENSSL_INSTALL_DIR}/lib/libcrypto.a # dependency on the actual library file needed for linking
+  # additional dependencies
+  Fw/Logger
   etl::etl
-  )
+)
 
 register_fprime_module()
 target_include_directories(${FPRIME_CURRENT_MODULE} PUBLIC "${OPENSSL_INCLUDE_DIR}")
 
+
+set(UT_SOURCE_FILES
+  "${CMAKE_CURRENT_LIST_DIR}/OpenSslWrapper.fpp"
+  "${CMAKE_CURRENT_LIST_DIR}/OpenSslWrapper.cpp"
+  "${CMAKE_CURRENT_LIST_DIR}/test/ut/OpenSslWrapperTester.cpp"
+  "${CMAKE_CURRENT_LIST_DIR}/test/ut/OpenSslWrapperTestMain.cpp"
+)
+set(UT_MOD_DEPS
+  OpenSSL
+  ${OPENSSL_INSTALL_DIR}/lib/libcrypto.a
+  etl::etl
+)
+set(UT_AUTO_HELPERS ON)
+register_fprime_ut()
+target_include_directories(${FPRIME_CURRENT_MODULE} PUBLIC "${OPENSSL_INCLUDE_DIR}")

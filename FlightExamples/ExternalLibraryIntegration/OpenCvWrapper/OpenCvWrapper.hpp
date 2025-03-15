@@ -1,6 +1,6 @@
 // ======================================================================
 // \title  OpenCvWrapper.hpp
-// \author chammard
+// \author thomas-bc
 // \brief  hpp file for OpenCvWrapper component implementation class
 // ======================================================================
 
