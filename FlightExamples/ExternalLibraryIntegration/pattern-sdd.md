@@ -19,7 +19,7 @@ Each section below is a different approach; they are listed by order of complexi
 |     |     |
 | --- | --- |
 | **Benefits** | Easy to set up; no additional build time |
-| **Drawbacks** | Not be portable across platforms |
+| **Drawbacks** | Not portable across platforms |
 | **Considerations** | May be provided by a vendor or third-party |
 
 A pre-compiled library is a library that has already been compiled and is ready to be used, often named `lib<libName>.a` or `lib<libName>.so`. There are many ways to obtain pre-compiled libraries, such as downloading them from a package manager or building them from source yourself.
@@ -50,11 +50,10 @@ If you have the source code for a library, multiple methods can be used to integ
 |     |     |
 | --- | --- |
 | **Benefits** | Very easy to set up; portable |
-| **Drawbacks** | May not handle transitive dependencies |
-| **Considerations** | Go-to solution if available |
+| **Drawbacks** | Not guaranteed to handle transitive dependencies |
+| **Considerations** | Recommended approach if available |
 
-
-Many popular libraries are available through the [FetchContent module](https://cmake.org/cmake/help/v3.31/module/FetchContent.html) for very simple integration. This module allows you to download and build the library as part of your project.
+Many popular libraries are available through the [FetchContent module](https://cmake.org/cmake/help/v3.31/module/FetchContent.html), allowing for very simple integration. This module will download and build the library as part of your project according to the library author's specifications.
 
 > [!IMPORTANT]
 > Just because a library is built by CMake does not mean it is compatible with `FetchContent`. OpenCV, for example, is not compatible with `FetchContent` (as of March 2025). In such cases, you will need to use `find_package()` or `ExternalProject_Add` as described in the sections below.
@@ -103,9 +102,9 @@ register_fprime_module()
 
 |     |     |
 | --- | --- |
-| **Benefits** | Somewhat easy to set-up |
+| **Benefits** | Easier than approach 4 |
 | **Drawbacks** | Additional step managed outside of CMake |
-| **Considerations** | Ensure developers will install dependency |
+| **Considerations** | Need to ensure developers will install the dependency |
 
 Some libraries may not be available with [`FetchContent`](https://cmake.org/cmake/help/v3.31/module/FetchContent.html). In this case, you may choose to install the library manually on your machine and use [`find_package()`](https://cmake.org/cmake/help/v3.31/command/find_package.html) in CMake to locate it. This is a common approach for libraries that have complex build requirements.
 
@@ -150,9 +149,46 @@ The `target_include_directories()` command adds the OpenCV include directories t
 > [!WARNING]
 > This approach is essentially building and installing the library, from source, as part of your project. This has some downsides:
 > * A library may have dependencies that are not installed by its build process. This can lead to hard-to-debug errors for users that use different systems. As an example, on RedHat 8 the OpenSSL library can not be built without `perl-IPC-Cmd` and a few other PERL yum package.
-> * The build process may take a long time, especially for large libraries.
 
+The ExternalProject module is highly flexible and allows you to build external projects as part of your CMake project, regardless of their build process. The full documentation can be found here: [https://cmake.org/cmake/help/v3.31/module/ExternalProject.html](https://cmake.org/cmake/help/v3.31/module/ExternalProject.html).
 
+#### Step 1: Understand the library's build process
 
-- ExternalProject_Add is running configure/build at project build-time so we need to make sure `openssl_lib` is a dependency of the current module so parallel builds don't break
-- Very complete API on CMake side, see: https://cmake.org/cmake/help/v3.31/module/ExternalProject.html#explicit-step-management
+Before you can use `ExternalProject_Add`, you need to understand how the library is built. This includes knowing the build system it uses (e.g., CMake, Makefile, etc.), any dependencies it may have, any configuration options that need to be set, as well as where the installation artifacts are placed.
+
+#### Step 2: Use ExternalProject_Add to build the library within CMake
+
+The library source code must be made available to the ExternalProject_Add command. This can be done with a local path (e.g. a git submodule or local tarball) or by specifying a remote URL. 
+
+The `ExternalProject_Add` command is used to build the library as part of your project. The following example demonstrates how to integrate the OpenSSL library using `ExternalProject_Add`:
+
+```cmake
+include(ExternalProject)
+
+set(OPENSSL_SOURCE_DIR ${FPRIME_PROJECT_ROOT}/lib/openssl) # Local path to the OpenSSL submodule
+set(OPENSSL_INSTALL_DIR ${CMAKE_BINARY_DIR}/openssl)       # Installation directory for OpenSSL
+set(OPENSSL_INCLUDE_DIR ${OPENSSL_INSTALL_DIR}/include)    # Path within the installation directory to the OpenSSL headers
+
+ExternalProject_Add(
+  OpenSSL
+  SOURCE_DIR ${OPENSSL_SOURCE_DIR}
+  CONFIGURE_COMMAND ${OPENSSL_SOURCE_DIR}/config --prefix=${OPENSSL_INSTALL_DIR} --openssldir=${OPENSSL_INSTALL_DIR}
+  BUILD_COMMAND make
+  TEST_COMMAND ""
+  INSTALL_COMMAND make install
+  INSTALL_DIR ${OPENSSL_INSTALL_DIR}
+)
+
+set(MOD_DEPS
+  OpenSSL # dependency on the OpenSSL target - this ensures the library is built before the current module
+  ${OPENSSL_INSTALL_DIR}/lib/libcrypto.a # dependency on the actual library file needed for linking
+  etl::etl   # additional dependencies as needed
+  )
+
+register_fprime_module()
+# Need to add the include directory for the OpenSSL headers to the current module
+target_include_directories(${FPRIME_CURRENT_MODULE} PUBLIC "${OPENSSL_INCLUDE_DIR}")
+```
+
+> [!NOTE]
+> In this example, we have added the `OpenSSL` dependency to a single module. If multiple modules depend on OpenSSL, you may want to add the `ExternalProject_Add` command to the root `project.cmake` file, as shown with the FetchContent method above.
