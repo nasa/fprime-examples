@@ -24,7 +24,6 @@ jobs:
       with:
         opencv-version: '4.0.0'
         opencv-extra-modules: false
-        install-deps: false
 
     - name: "Checkout Examples repo"
       uses: actions/checkout@v4
