@@ -1,6 +1,6 @@
 // ======================================================================
 // \title  OpenSslWrapperTestMain.cpp
-// \author chammard
+// \author thomas-bc
 // \brief  cpp file for OpenSslWrapper component test main function
 // ======================================================================
 

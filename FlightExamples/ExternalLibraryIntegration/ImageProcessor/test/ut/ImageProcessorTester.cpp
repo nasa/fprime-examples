@@ -1,6 +1,6 @@
 // ======================================================================
 // \title  ImageProcessorTester.cpp
-// \author chammard
+// \author thomas-bc
 // \brief  cpp file for ImageProcessor component test harness implementation class
 // ======================================================================
 
@@ -26,8 +26,6 @@ ImageProcessorTester ::~ImageProcessorTester() {}
 
 void ImageProcessorTester ::testReadImage() {
     this->clearEvents();
-    // Read an image from a known path and store it at index 0
-    Fw::String onboardPath("../../");
 }
 
 }  // namespace ExternalLibraryIntegration

@@ -1,6 +1,6 @@
 // ======================================================================
 // \title  ImageProcessorTestMain.cpp
-// \author chammard
+// \author thomas-bc
 // \brief  cpp file for ImageProcessor component test main function
 // ======================================================================
 

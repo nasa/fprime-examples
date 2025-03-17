@@ -18,10 +18,7 @@ set(SOURCE_FILES
 # OpenCV needs to be installed on the system before running the build
 # Follow https://docs.opencv.org/4.11.0/d0/d3d/tutorial_general_install.html
 find_package(OpenCV REQUIRED)
-
-message(STATUS "OpenCV_INCLUDE_DIRS: ${OpenCV_INCLUDE_DIRS}")
 message(STATUS "Found OpenCV_LIBS: ${OpenCV_LIBS}")
-
 
 set(MOD_DEPS
   opencv_core
@@ -29,7 +26,6 @@ set(MOD_DEPS
   opencv_imgproc
   etl::etl
 )
-
 register_fprime_module()
 
 

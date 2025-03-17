@@ -21,6 +21,8 @@ jobs:
 
     - name: "Checkout Examples repo"
       uses: actions/checkout@v4
+      with:
+        submodules: recursive
 
     - name: "Overlay nasa/fprime@devel"
       uses: actions/checkout@v4

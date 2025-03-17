@@ -1,5 +1,9 @@
+###########################
+## Fetch ETL library     ##
+###########################
 # Make ETL available at the project level
-# See <include link to pattern> for more information on how to use FetchContent
+# See https://fprime.jpl.nasa.gov/latest/docs/how-to/integrate-external-libraries 
+# for more information on how to use FetchContent
 include(FetchContent)
 FetchContent_Declare(
     etl
@@ -29,7 +33,6 @@ ExternalProject_Add(
   INSTALL_COMMAND make install
   INSTALL_DIR ${OPENSSL_INSTALL_DIR}
 )
-
 # Since ExternalProject_Add will only build OpenSSL at project-build-time, we need to create the
 # include directory so it exists at project-configure-time
 file(MAKE_DIRECTORY ${OPENSSL_INCLUDE_DIR})
@@ -39,8 +42,9 @@ set_property(TARGET OpenSSL::Crypto PROPERTY IMPORTED_LOCATION ${OPENSSL_INSTALL
 set_property(TARGET OpenSSL::Crypto PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${OPENSSL_INCLUDE_DIR})
 add_dependencies(OpenSSL::Crypto OpenSSL)
 
-
-# Add F Prime subdirectories for the various modules that depend on the above libraries
+###########################
+## Module subdirectories ##
+###########################
 add_fprime_subdirectory("${CMAKE_CURRENT_LIST_DIR}/OpenSslWrapper/")
 add_fprime_subdirectory("${CMAKE_CURRENT_LIST_DIR}/ImageProcessor/")
 add_fprime_subdirectory("${CMAKE_CURRENT_LIST_DIR}/Types/")

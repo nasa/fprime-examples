@@ -1,6 +1,6 @@
 // ======================================================================
 // \title  ImageProcessorTester.hpp
-// \author chammard
+// \author thomas-bc
 // \brief  hpp file for ImageProcessor component test harness implementation class
 // ======================================================================
 

@@ -1,6 +1,6 @@
 // ======================================================================
 // \title  OpenSslWrapperTester.cpp
-// \author chammard
+// \author thomas-bc
 // \brief  cpp file for OpenSslWrapper component test harness implementation class
 // ======================================================================
 
