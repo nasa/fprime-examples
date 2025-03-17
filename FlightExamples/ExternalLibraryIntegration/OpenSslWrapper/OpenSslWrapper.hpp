@@ -81,7 +81,7 @@ class OpenSslWrapper : public OpenSslWrapperComponentBase {
                            const U8* key,
                            const U8* iv,
                            EVP_CIPHER_CTX* ctx,
-                           EVP_CIPHER* cipher);
+                           EVP_CIPHER* cipher) const;
 
     // Encrypt buffer in place and return length of encrypted buffer
     FwSizeType aes_encrypt(U8* buffer,
@@ -89,7 +89,7 @@ class OpenSslWrapper : public OpenSslWrapperComponentBase {
                            const U8* key,
                            const U8* iv,
                            EVP_CIPHER_CTX* ctx,
-                           EVP_CIPHER* cipher);
+                           EVP_CIPHER* cipher) const;
 
     // Register a new AES Key
     void registerAesKey(CryptoTypes::AesKeyType key);

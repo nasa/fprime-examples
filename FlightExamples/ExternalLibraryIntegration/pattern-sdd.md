@@ -6,13 +6,14 @@
 > [!TIP]
 > CMake also provides a [Using Dependencies Guide](https://cmake.org/cmake/help/v3.31/guide/using-dependencies/index.html) which we recommend reading for a deeper understanding of how to integrate dependencies into your CMake projects.
 
-It is common practice to use third-party libraries in F´ projects. CMake provides multiple ways to integrate external libraries into a project, and the F´ build system facilitates it even further. This document will cover the different ways to integrate external libraries into your F´ project.
-
-Each section below is a different approach; they are listed by order of complexity.
+It is common practice to use third-party libraries in F´ projects. CMake provides multiple ways to integrate external libraries into a project, and the F´ build system facilitates it even further. This document will cover four different approaches to integrate external libraries into your F´ project design and build process. You should also refer to each library's documentation for any specific requirements or recommendations for integration, as there are many different ways to build and use libraries in CMake.
 
 > [!NOTE]
 > The source code for the examples shown in this guide can be found in our examples repo here: [https://github.com/nasa/fprime-examples/tree/devel/FlightExamples/ExternalLibraryIntegration](https://github.com/nasa/fprime-examples/tree/devel/FlightExamples/ExternalLibraryIntegration)
 
+## Common considerations
+
+For each of the following approaches, one
 
 ## Approach 1: Pre-compiled library files
 
@@ -22,7 +23,7 @@ Each section below is a different approach; they are listed by order of complexi
 | **Drawbacks** | Not portable across platforms |
 | **Considerations** | May be provided by a vendor or third-party |
 
-A pre-compiled library is a library that has already been compiled and is ready to be used, often named `lib<libName>.a` or `lib<libName>.so`. There are many ways to obtain pre-compiled libraries, such as downloading them from a package manager or building them from source yourself.
+A pre-compiled library is a library that has already been compiled and is ready to be used, often named `lib<libName>.a` or `lib<libName>.so`. There are many ways to obtain pre-compiled libraries, such as downloading them from a vendor repository or building them from source yourself.
 
 To integrate a pre-compiled library, you need to add the path of that library file to `MOD_DEPS` of the module(s) that depend on it (MOD_DEPS: module dependencies). The following example demonstrates how to integrate a the OpenSSL `libcrypto` library into an F´ wrapper component:
 
@@ -40,11 +41,6 @@ target_include_directories(${FPRIME_CURRENT_MODULE} PUBLIC "${FPRIME_PROJECT_ROO
 
 This assumes that the `libcrypto.a` is available in the `lib/libssl/` directory of your F´ project root, and that the necessary header files are in `lib/libssl/include/`.
 
-An example of the OpenSslWrapper component using this pre-compiled approach is shown here: [https://github.com/nasa/fprime-examples/tree/devel/FlightExamples/ExternalLibraryIntegration/OpenSslWrapper](https://github.com/nasa/fprime-examples/tree/devel/FlightExamples/ExternalLibraryIntegration/OpenSslWrapper)
-
-
-If you have the source code for a library, multiple methods can be used to integrate it into your project. 
-
 ## Approach 2: CMake library available through the FetchContent module
 
 |     |     |
@@ -61,10 +57,6 @@ Many popular libraries are available through the [FetchContent module](https://c
 
 ##### Step 1: Use FetchContent to include the library in your project.
 
-This can be done either
-  (a) in the root `project.cmake` file if multiple modules will depend on the library, OR 
-  (b) in a `CMakeLists.txt` of the module that needs the library file if the library is only used by one module.
-
 The following excerpt demonstrates how to integrate the [ETL libraries](https://github.com/ETLCPP/etl) using `FetchContent`:
 
 ```cmake
@@ -79,7 +71,8 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(etl)
 ```
 
-In the `fprime-examples` repository, this is done at the project level in the [project.cmake](../project.cmake) file. This allows any module in the project to use the `etl` library.
+In the `fprime-examples` repository, this is done in [ExternalLibraryIntegration/CMakeLists.txt](https://github.com/nasa/fprime-examples/tree/devel/FlightExamples/ExternalLibraryIntegration/CMakeLists.txt) file. This allows any module within the ExternalLibraryIntegration module to use `etl` library.
+If the library is only needed by a single component, it is also acceptable to place the `FetchContent` code directly in that component's `CMakeLists.txt` file. If the library is needed at the project level, it is best to place the `FetchContent` code in the root `project.cmake` file.
 
 ##### Step 2: Set the library as a dependency of the module
 
@@ -114,22 +107,21 @@ There can be many ways to install the library, such as using a package manager (
 
 ##### Step 2: Use find_package() to locate the library
 
-CMake can be surprisingly good at locating libraries on your system, provided they are installed in standard locations. Should you install the library in a non-standard location, you may need to set the [`CMAKE_MODULE_PATH`](https://cmake.org/cmake/help/latest/variable/CMAKE_MODULE_PATH.html) variable to point to the directory containing the library's CMake configuration files.
+CMake will look for installed packages in standard locations as well as additional locations based on your PATH. Should you install the library in a non-standard location, you may need to set the [`CMAKE_PREFIX_PATH`](https://cmake.org/cmake/help/latest/variable/CMAKE_PREFIX_PATH.html) variable to point to the directory containing the library's CMake configuration files (in the form `<libName>Config.cmake` or `<libName>-config.cmake`).
 
-The [OpenCvWrapper component](https://github.com/nasa/fprime-examples/tree/devel/FlightExamples/ExternalLibraryIntegration/OpenCvWrapper) component demonstrates this approach by encapsulating the OpenCV library after it has been installed through `pip`. The following code shows how to integrate the OpenCV library using `find_package()`:
+The [OpenCvWrapper component](https://github.com/nasa/fprime-examples/tree/devel/FlightExamples/ExternalLibraryIntegration/OpenCvWrapper) component demonstrates this approach by encapsulating the OpenCV library after it has been installed on the system. The following code shows how to integrate the OpenCV library using `find_package()`:
 
 ```cmake
 # The following requires that OpenCV is installed on the system and may need to be added to CMAKE_MODULE_PATH
 find_package(OpenCV REQUIRED)
 set(MOD_DEPS
-  ${OpenCV_LIBS}
+  ${OpenCV_LIBS} # You may only need a subset of the libraries
 )
 register_fprime_module()
-target_include_directories(${FPRIME_CURRENT_MODULE} PUBLIC "${OpenCV_INCLUDE_DIRS}")
 ```
 
-The `find_package()` command searches for the OpenCV library and sets the `OpenCV_LIBS` variable to the appropriate libraries. You may refer to your own library's documentation to find the correct variable names to use.  
-The `target_include_directories()` command adds the OpenCV include directories to the `FPRIME_CURRENT_MODULE`, allowing it to access the OpenCV headers.
+The `find_package()` command searches for the OpenCV library and sets the `OpenCV_LIBS` variable to the appropriate libraries. You may refer to your own library's documentation to find the correct variable or direct library names to use.  
+Should the OpenCV package be needed my multiple modules, that directive can be placed in the root `project.cmake` file instead.
 
 > [!IMPORTANT]
 > When using this approach, you must ensure that users of your project have the library installed on their system. This can be done by providing instructions in your project's documentation.
@@ -160,35 +152,78 @@ Before you can use `ExternalProject_Add`, you need to understand how the library
 
 The library source code must be made available to the ExternalProject_Add command. This can be done with a local path (e.g. a git submodule or local tarball) or by specifying a remote URL. 
 
-The `ExternalProject_Add` command is used to build the library as part of your project. The following example demonstrates how to integrate the OpenSSL library using `ExternalProject_Add`:
+The `ExternalProject_Add` command is used to build the library as part of your CMake project. This is done by specifying the steps identified in Step 1 through the `CONFIGURE_COMMAND`, `BUILD_COMMAND`, `INSTALL_COMMAND`, and more. Please referer to the [ExternalProject documentation](https://cmake.org/cmake/help/v3.31/module/ExternalProject.html) for more information. 
+
+After this is done, you can create a CMake library using `add_library()` and set its properties to point to the built library and its include directories. This allows you to use the library in your F´ modules just like any other library.
+
+The following example demonstrates how to integrate the OpenSSL library using `ExternalProject_Add`:
 
 ```cmake
 include(ExternalProject)
 
-set(OPENSSL_SOURCE_DIR ${FPRIME_PROJECT_ROOT}/lib/openssl) # Local path to the OpenSSL submodule
-set(OPENSSL_INSTALL_DIR ${CMAKE_BINARY_DIR}/openssl)       # Installation directory for OpenSSL
-set(OPENSSL_INCLUDE_DIR ${OPENSSL_INSTALL_DIR}/include)    # Path within the installation directory to the OpenSSL headers
+set(OPENSSL_SOURCE_DIR ${FPRIME_PROJECT_ROOT}/lib/openssl)
+set(OPENSSL_INSTALL_DIR ${CMAKE_BINARY_DIR}/openssl)
+set(OPENSSL_INCLUDE_DIR ${OPENSSL_INSTALL_DIR}/include)
 
 ExternalProject_Add(
   OpenSSL
   SOURCE_DIR ${OPENSSL_SOURCE_DIR}
-  CONFIGURE_COMMAND ${OPENSSL_SOURCE_DIR}/config --prefix=${OPENSSL_INSTALL_DIR} --openssldir=${OPENSSL_INSTALL_DIR}
+  CONFIGURE_COMMAND
+    ${OPENSSL_SOURCE_DIR}/config
+    --prefix=${OPENSSL_INSTALL_DIR}
+    --openssldir=${OPENSSL_INSTALL_DIR}
   BUILD_COMMAND make
   TEST_COMMAND ""
   INSTALL_COMMAND make install
   INSTALL_DIR ${OPENSSL_INSTALL_DIR}
 )
 
-set(MOD_DEPS
-  OpenSSL # dependency on the OpenSSL target - this ensures the library is built before the current module
-  ${OPENSSL_INSTALL_DIR}/lib/libcrypto.a # dependency on the actual library file needed for linking
-  etl::etl   # additional dependencies as needed
-  )
-
-register_fprime_module()
-# Need to add the include directory for the OpenSSL headers to the current module
-target_include_directories(${FPRIME_CURRENT_MODULE} PUBLIC "${OPENSSL_INCLUDE_DIR}")
+# Since ExternalProject_Add will only build OpenSSL at project-build-time, we need to create the
+# include directory so it exists at project-configure-time
+file(MAKE_DIRECTORY ${OPENSSL_INCLUDE_DIR})
+# Declare the properties needed for the OpenSSL::Crypto library
+add_library(OpenSSL::Crypto STATIC IMPORTED GLOBAL)
+set_property(TARGET OpenSSL::Crypto PROPERTY IMPORTED_LOCATION ${OPENSSL_INSTALL_DIR}/lib/libcrypto.a)
+set_property(TARGET OpenSSL::Crypto PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${OPENSSL_INCLUDE_DIR})
+add_dependencies(OpenSSL::Crypto OpenSSL)
 ```
 
 > [!NOTE]
-> In this example, we have added the `OpenSSL` dependency to a single module. If multiple modules depend on OpenSSL, you may want to add the `ExternalProject_Add` command to the root `project.cmake` file, as shown with the FetchContent method above.
+> The source code for this example can be found at [ExternalLibraryIntegration/OpenSslWrapper](https://github.com/nasa/fprime-examples/tree/devel/FlightExamples/ExternalLibraryIntegration/CMakeLists.txt).
+
+
+#### Step 3: Set the library as a dependency of the module/component
+
+Any component or module that depends on OpenSSL can now link against it by adding the following entry to its `MOD_DEPS`:
+
+```cmake
+# OpenSslWrapper component
+set(SOURCE_FILES
+  "${CMAKE_CURRENT_LIST_DIR}/OpenSslWrapper.fpp"
+  "${CMAKE_CURRENT_LIST_DIR}/OpenSslWrapper.cpp"
+)
+set(MOD_DEPS
+  OpenSSL::Crypto   # Target name we just registered for the OpenSSL crypto library
+)
+register_fprime_module()
+```
+
+> [!NOTE]
+> The source code for this example can be found at [ExternalLibraryIntegration/OpenSslWrapper](https://github.com/nasa/fprime-examples/tree/devel/FlightExamples/ExternalLibraryIntegration/OpenSslWrapper).
+
+
+## Patterns for using a library in the F´ architecture
+
+When integrating a library into your F´ project, you may want to consider how the library will be used within the F´ architecture. The following patterns are common when using libraries in F´:
+
+### 1. Wrapper Component
+
+A wrapper component is a component that encapsulates the library's functionality and provides an interface to the library functionalities for other F´ components to use through port calls. This allows for other components of the system to benefit from the library functionalities directly through F Prime objects. In the [ExternalLibraryIntegration examples](https://github.com/nasa/fprime-examples/tree/devel/FlightExamples/ExternalLibraryIntegration/) that we have seen so far, we have used this pattern to wrap the OpenSSL cryptographic functions in the `OpenSslWrapper` component so that we encrypt and decrypt Fw::Buffer objects directly, through a port call. This also allows to centralize the management of cryptographic keys and other configuration parameters in the wrapper component, making it easier to manage and update the library's usage across the system.
+
+### 2. Global library usage
+
+You may wish to use library code in multiple places, without wrapping it in a component. This can be the case for libraries that provide utilities that are not tied to a specific component or unit of behavior. This can for example be the case for the [ETL library](https://github.com/ETLCPP/etl) – used in both `OpenSslWrapper`  and `OpenCvWrapper` – which provides a set of utilities for working with C++ containers and algorithms in embedded systems. In this case, each component that needs to use the library can define it in their `MOD_DEPS` for direct usage.
+
+### 3. Others
+
+It is ultimately up to the project to determine how to best use a library within the F´ architecture. The above patterns are common, but you may find that your project requires a different approach based on the library's functionality and how it fits into your system's architecture.

@@ -82,7 +82,7 @@ FwSizeType OpenSslWrapper::aes_encrypt(U8* buffer,
                                        const U8* key,
                                        const U8* iv,
                                        EVP_CIPHER_CTX* ctx,
-                                       EVP_CIPHER* cipher) {
+                                       EVP_CIPHER* cipher) const {
     PlatformIntType len;
     PlatformIntType ciphertext_len;
 
@@ -116,7 +116,7 @@ FwSizeType OpenSslWrapper::aes_decrypt(U8* buffer,
                                        const U8* key,
                                        const U8* iv,
                                        EVP_CIPHER_CTX* ctx,
-                                       EVP_CIPHER* cipher) {
+                                       EVP_CIPHER* cipher) const {
     PlatformIntType outlen;
     PlatformIntType plaintext_len;
 

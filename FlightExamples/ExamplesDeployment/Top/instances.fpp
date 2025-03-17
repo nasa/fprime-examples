@@ -126,5 +126,6 @@ module ExamplesDeployment {
   instance fprimeRouter: Svc.FprimeRouter base id 0x4D00
 
   instance openSslWrapper: ExternalLibraryIntegration.OpenSslWrapper base id 0x4E00
-  instance openCvWrapper: ExternalLibraryIntegration.OpenCvWrapper base id 0x4F00
+  
+  instance imageProcessor: ExternalLibraryIntegration.ImageProcessor base id 0x4F00
 }

@@ -61,7 +61,7 @@ void OpenSslWrapperTester ::testAesDecryption() {
     // Assert the decryption status and check the decrypted data
     ASSERT_EQ(status, CryptoTypes::DecryptStatus::OK);
     // printf("Decrypted data: ");
-    for (size_t i = 0; i < sizeof(decrypted_data); ++i) {
+    for (FwSizeType i = 0; i < sizeof(decrypted_data); ++i) {
         // printf("%02x ", encrypted_buff.getData()[i]);
         ASSERT_EQ(encrypted_buff.getData()[i], decrypted_data[i]); // Ensure decrypted data matches expected
     }
@@ -87,12 +87,9 @@ void OpenSslWrapperTester ::testAesEncryption() {
   
   // Assert the encryption status and check the decrypted data
   ASSERT_EQ(status, CryptoTypes::DecryptStatus::OK);
-  // printf("Decrypted data: ");
-  for (size_t i = 0; i < sizeof(decrypted_data); ++i) {
-      // printf("%02x ", decrypted_buff.getData()[i]);
+  for (FwSizeType i = 0; i < sizeof(decrypted_data); ++i) {
       ASSERT_EQ(decrypted_buff.getData()[i], encrypted_data[i]); // Ensure decrypted data matches expected
   }
-  // printf("\n");
 
 }
 

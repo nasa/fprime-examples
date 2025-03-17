@@ -48,7 +48,7 @@ module ExamplesDeployment {
     instance textLogger
     instance systemResources
     instance openSslWrapper
-    instance openCvWrapper
+    instance imageProcessor
 
     # ----------------------------------------------------------------------
     # Pattern graph specifiers

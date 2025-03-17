@@ -1,4 +1,4 @@
-module CryptoTypes {
+module LibTypes {
 
     array AesKeyType = [32] U8
 
