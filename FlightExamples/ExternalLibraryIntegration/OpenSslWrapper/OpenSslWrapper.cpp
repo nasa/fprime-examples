@@ -29,28 +29,28 @@ OpenSslWrapper ::~OpenSslWrapper() {
 // Handler implementations for user-defined typed input ports
 // ----------------------------------------------------------------------
 
-CryptoTypes::DecryptStatus OpenSslWrapper ::aesDecryptIn_handler(FwIndexType portNum,
+ExternalLibraryIntegration::DecryptStatus OpenSslWrapper ::aesDecryptIn_handler(FwIndexType portNum,
                                                                  U16 sa_id,
                                                                  Fw::Buffer& iv,
                                                                  Fw::Buffer& in_buffer) {
-    CryptoTypes::DecryptStatus status = CryptoTypes::DecryptStatus::ERROR;
+    ExternalLibraryIntegration::DecryptStatus status = ExternalLibraryIntegration::DecryptStatus::ERROR;
     // Decrypt with AES and symmetric key
     aes_decrypt(in_buffer.getData(), in_buffer.getSize(), &this->m_aesKey[0], iv.getData(), this->m_cipherCtx,
                 this->m_cipherMethod);
-    status = CryptoTypes::DecryptStatus::OK;
+    status = ExternalLibraryIntegration::DecryptStatus::OK;
 
     return status;
 }
 
-CryptoTypes::DecryptStatus OpenSslWrapper ::aesEncryptIn_handler(FwIndexType portNum,
+ExternalLibraryIntegration::DecryptStatus OpenSslWrapper ::aesEncryptIn_handler(FwIndexType portNum,
                                                                  U16 sa_id,
                                                                  Fw::Buffer& iv,
                                                                  Fw::Buffer& in_buffer) {
-    CryptoTypes::DecryptStatus status = CryptoTypes::DecryptStatus::ERROR;
+    ExternalLibraryIntegration::DecryptStatus status = ExternalLibraryIntegration::DecryptStatus::ERROR;
     // Decrypt with AES and symmetric key
     aes_encrypt(in_buffer.getData(), in_buffer.getSize(), &this->m_aesKey[0], iv.getData(), this->m_cipherCtx,
                 this->m_cipherMethod);
-    status = CryptoTypes::DecryptStatus::OK;
+    status = ExternalLibraryIntegration::DecryptStatus::OK;
 
     return status;
 }
@@ -61,14 +61,14 @@ CryptoTypes::DecryptStatus OpenSslWrapper ::aesEncryptIn_handler(FwIndexType por
 
 void OpenSslWrapper ::REGISTER_AES_KEY_cmdHandler(FwOpcodeType opCode,  //!< The opcode
                                                   U32 cmdSeq,           //!< The command sequence number
-                                                  CryptoTypes::AesKeyType key) {
+                                                  ExternalLibraryIntegration::AesKeyType key) {
     this->registerAesKey(key);
     this->cmdResponse_out(opCode, cmdSeq, Fw::CmdResponse::OK);
 }
 
 void OpenSslWrapper ::DEREGISTER_AES_KEY_cmdHandler(FwOpcodeType opCode,  //!< The opcode
                                                     U32 cmdSeq) {         //!< The command sequence number
-    this->m_aesKey = CryptoTypes::AesKeyType(0);
+    this->m_aesKey = ExternalLibraryIntegration::AesKeyType(0);
     this->log_ACTIVITY_HI_SymmetricKeyDeregistered(1);
     this->cmdResponse_out(opCode, cmdSeq, Fw::CmdResponse::OK);
 }
@@ -145,7 +145,7 @@ FwSizeType OpenSslWrapper::aes_decrypt(U8* buffer,
     return plaintext_len;
 }
 
-void OpenSslWrapper::registerAesKey(CryptoTypes::AesKeyType key) {
+void OpenSslWrapper::registerAesKey(ExternalLibraryIntegration::AesKeyType key) {
     FW_ASSERT(key.SIZE == this->AES_KEY_SIZE, key.SIZE);
     this->m_aesKey = key;
     this->log_ACTIVITY_HI_SymmetricKeyRegistered(1);

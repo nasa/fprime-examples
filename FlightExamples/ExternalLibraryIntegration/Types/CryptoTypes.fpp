@@ -1,4 +1,4 @@
-module LibTypes {
+module ExternalLibraryIntegration {
 
     array AesKeyType = [32] U8
 
@@ -23,6 +23,7 @@ module LibTypes {
     port AesKeyRegistration(
         key: AesKeyType,               @< Symmetric key to register (16 bytes - 256 bits)
     ) -> AesSessionStatus
+
 
 
 }

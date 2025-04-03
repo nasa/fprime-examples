@@ -1,4 +1,5 @@
 module ExternalLibraryIntegration {
+
     @ Component for F Prime FSW framework.
     passive component ImageProcessor {
 
@@ -6,10 +7,10 @@ module ExternalLibraryIntegration {
         sync command PROCESS_IMAGES() opcode 1
 
         @ Read onboard image file into the ImageProcessor processing array
-        sync input port readImageAt: LibTypes.ReadImageAtIndex
+        sync input port readImageAt: ExternalLibraryIntegration.ReadImageAtIndex
 
         event ImageReadSuccess(index: U8) severity activity high format "ImageRead success - added at index {}"
-        event ImageReadFailure(index: U8, status: LibTypes.ImageReadStatus) severity activity high format "ImageRead attempt for index {} resulted in {}"
+        event ImageReadFailure(index: U8, status: ExternalLibraryIntegration.ImageReadStatus) severity activity high format "ImageRead attempt for index {} resulted in {}"
 
         ###############################################################################
         # Standard AC Ports: Required for Channels, Events, Commands, and Parameters  #

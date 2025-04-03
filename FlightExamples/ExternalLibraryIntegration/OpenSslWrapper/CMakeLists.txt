@@ -19,6 +19,7 @@ set(MOD_DEPS
   # OpenSSL dependency
   OpenSSL::Crypto
   # additional dependencies
+  ExternalLibraryIntegration/Types
   Fw/Logger
   etl::etl
 )

@@ -15,15 +15,14 @@ set(SOURCE_FILES
   "${CMAKE_CURRENT_LIST_DIR}/ImageProcessor.cpp"
 )
 
-# OpenCV needs to be installed on the system before running the build
-# Follow https://docs.opencv.org/4.11.0/d0/d3d/tutorial_general_install.html
-find_package(OpenCV REQUIRED)
-message(STATUS "Found OpenCV_LIBS: ${OpenCV_LIBS}")
+# message(STATUS "Found OpenCV_LIBS: ${OpenCV_LIBS}")
 
 set(MOD_DEPS
-  opencv_core
-  opencv_imgcodecs
-  opencv_imgproc
+  # opencv_core
+  # opencv_imgcodecs
+  # opencv_imgproc
+  ExternalLibraryIntegration/Types
+  Fw/Types
   etl::etl
 )
 register_fprime_module()

@@ -1,4 +1,11 @@
 ###########################
+## Add OpenCV library    ##
+###########################
+# OpenCV needs to be installed on the system before running the build
+# Follow https://docs.opencv.org/4.11.0/d0/d3d/tutorial_general_install.html
+# add_subdirectory("${FPRIME_PROJECT_ROOT}/lib/opencv" "${CMAKE_BINARY_DIR}/opencv")
+
+###########################
 ## Fetch ETL library     ##
 ###########################
 # Make ETL available at the project level
@@ -45,6 +52,6 @@ add_dependencies(OpenSSL::Crypto OpenSSL)
 ###########################
 ## Module subdirectories ##
 ###########################
+add_fprime_subdirectory("${CMAKE_CURRENT_LIST_DIR}/Types/")
 add_fprime_subdirectory("${CMAKE_CURRENT_LIST_DIR}/OpenSslWrapper/")
 add_fprime_subdirectory("${CMAKE_CURRENT_LIST_DIR}/ImageProcessor/")
-add_fprime_subdirectory("${CMAKE_CURRENT_LIST_DIR}/Types/")

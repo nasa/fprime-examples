@@ -14,7 +14,7 @@ namespace ExternalLibraryIntegration {
 
 ImageProcessor ::ImageProcessor(const char* const compName) : ImageProcessorComponentBase(compName) {
     // Initialize the image vector with a fixed size (10 in this case)
-    this->m_imageVector.resize(10);
+    // this->m_imageVector.resize(10);
 }
 
 ImageProcessor ::~ImageProcessor() {}
@@ -23,29 +23,29 @@ ImageProcessor ::~ImageProcessor() {}
 // Component methods
 // ----------------------------------------------------------------------
 
-LibTypes::ImageReadStatus ImageProcessor ::readImageAt_handler(FwIndexType portNum,
+ExternalLibraryIntegration::ImageReadStatus ImageProcessor ::readImageAt_handler(FwIndexType portNum,
                                                               U8 index,
                                                               const Fw::StringBase& onboardPath) {
-    LibTypes::ImageReadStatus status = LibTypes::ImageReadStatus::OTHER_ERROR;
-    if (index < this->m_imageVector.size()) {
-        // Read the image from the specified path and store it in the vector
-        cv::Mat image = cv::imread(onboardPath.toChar(), cv::IMREAD_COLOR);
-        if (!image.empty()) {
-            this->m_imageVector[index] = image;
-            // Log success
-            this->log_ACTIVITY_HI_ImageReadSuccess(index);
-            status = LibTypes::ImageReadStatus::OK;
-        } else {
-            // Log failure
-            this->log_ACTIVITY_HI_ImageReadFailure(index, LibTypes::ImageReadStatus::OTHER_ERROR);
-            status = LibTypes::ImageReadStatus::OTHER_ERROR;
-        }
-    } else {
-        // Log invalid index
-        this->log_ACTIVITY_HI_ImageReadFailure(index, LibTypes::ImageReadStatus::INVALID_INDEX);
-        status = LibTypes::ImageReadStatus::INVALID_INDEX;
-    }
-    return status;
+    // ExternalLibraryIntegration::ImageReadStatus status = ExternalLibraryIntegration::ImageReadStatus::OTHER_ERROR;
+    // if (index < this->m_imageVector.size()) {
+    //     // Read the image from the specified path and store it in the vector
+    //     cv::Mat image = cv::imread(onboardPath.toChar(), cv::IMREAD_COLOR);
+    //     if (!image.empty()) {
+    //         this->m_imageVector[index] = image;
+    //         // Log success
+    //         this->log_ACTIVITY_HI_ImageReadSuccess(index);
+    //         status = ExternalLibraryIntegration::ImageReadStatus::OK;
+    //     } else {
+    //         // Log failure
+    //         this->log_ACTIVITY_HI_ImageReadFailure(index, ExternalLibraryIntegration::ImageReadStatus::OTHER_ERROR);
+    //         status = ExternalLibraryIntegration::ImageReadStatus::OTHER_ERROR;
+    //     }
+    // } else {
+    //     // Log invalid index
+    //     this->log_ACTIVITY_HI_ImageReadFailure(index, ExternalLibraryIntegration::ImageReadStatus::INVALID_INDEX);
+    //     status = ExternalLibraryIntegration::ImageReadStatus::INVALID_INDEX;
+    // }
+    // return status;
 }
 
 // ----------------------------------------------------------------------

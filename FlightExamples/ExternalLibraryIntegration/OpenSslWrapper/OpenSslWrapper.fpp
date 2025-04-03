@@ -4,15 +4,15 @@ module ExternalLibraryIntegration {
     passive component OpenSslWrapper {
 
         @ Register a new AES key
-        sync command REGISTER_AES_KEY(key: CryptoTypes.AesKeyType) opcode 0
+        sync command REGISTER_AES_KEY(key: AesKeyType) opcode 0
         @ De-register the current AES key (effectively ends the session)
         sync command DEREGISTER_AES_KEY() opcode 1
 
         @ Perform AES encryption
-        sync input port aesEncryptIn: CryptoTypes.AesEncryptDecrypt
+        sync input port aesEncryptIn: AesEncryptDecrypt
 
         @ Perform AES decryption
-        sync input port aesDecryptIn: CryptoTypes.AesEncryptDecrypt
+        sync input port aesDecryptIn: AesEncryptDecrypt
 
         @ New AES key has been registered, starts the AES session
         event SymmetricKeyRegistered(sa_id: U16) severity activity high format "New AES session - key registered with SA id {}"

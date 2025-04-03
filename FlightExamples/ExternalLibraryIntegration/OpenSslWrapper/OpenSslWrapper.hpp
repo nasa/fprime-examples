@@ -36,7 +36,7 @@ class OpenSslWrapper : public OpenSslWrapperComponentBase {
     // ----------------------------------------------------------------------
 
     //! Handler implementation for aesDecryptIn
-    CryptoTypes::DecryptStatus aesDecryptIn_handler(
+    ExternalLibraryIntegration::DecryptStatus aesDecryptIn_handler(
         FwIndexType portNum,        //!< The port number
         U16 sa_id,                  //!< Security Association (SPI)
         Fw::Buffer& iv,             //!< Initialization Vector
@@ -44,7 +44,7 @@ class OpenSslWrapper : public OpenSslWrapperComponentBase {
         ) override;
 
     //! Handler implementation for aesEncryptIn
-    CryptoTypes::DecryptStatus aesEncryptIn_handler(
+    ExternalLibraryIntegration::DecryptStatus aesEncryptIn_handler(
       FwIndexType portNum,        //!< The port number
       U16 sa_id,                  //!< Security Association (SPI)
       Fw::Buffer& iv,             //!< Initialization Vector
@@ -61,7 +61,7 @@ class OpenSslWrapper : public OpenSslWrapperComponentBase {
     //! Register a new symmetric key with Security Association (SA) sa_id
     void REGISTER_AES_KEY_cmdHandler(FwOpcodeType opCode,  //!< The opcode
                                      U32 cmdSeq,           //!< The command sequence number
-                                     CryptoTypes::AesKeyType key) override;
+                                     ExternalLibraryIntegration::AesKeyType key) override;
 
     //! Handler implementation for command DEREGISTER_AES_KEY
     //!
@@ -92,14 +92,14 @@ class OpenSslWrapper : public OpenSslWrapperComponentBase {
                            EVP_CIPHER* cipher) const;
 
     // Register a new AES Key
-    void registerAesKey(CryptoTypes::AesKeyType key);
+    void registerAesKey(ExternalLibraryIntegration::AesKeyType key);
 
     // Get the AES key in raw bytes (U8*)
     U8* getAesKey();
   
   PRIVATE:
     // AES Key type to transmit over the wire (unsafe without asymetric encryption)
-    CryptoTypes::AesKeyType m_aesKey;  // U8[32] (defined in FPP)
+    ExternalLibraryIntegration::AesKeyType m_aesKey;  // U8[32] (defined in FPP)
     // OpenSSL types for AES methods
     EVP_CIPHER* m_cipherMethod;
     EVP_CIPHER_CTX* m_cipherCtx;

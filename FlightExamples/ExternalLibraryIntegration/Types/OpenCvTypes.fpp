@@ -1,4 +1,4 @@
-module LibTypes {
+module ExternalLibraryIntegration {
 
     enum ImageReadStatus {
         OK,
