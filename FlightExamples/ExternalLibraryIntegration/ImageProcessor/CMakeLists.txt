@@ -15,15 +15,15 @@ set(SOURCE_FILES
   "${CMAKE_CURRENT_LIST_DIR}/ImageProcessor.cpp"
 )
 
-# message(STATUS "Found OpenCV_LIBS: ${OpenCV_LIBS}")
-
 set(MOD_DEPS
-  # opencv_core
-  # opencv_imgcodecs
-  # opencv_imgproc
-  ExternalLibraryIntegration/Types
-  Fw/Types
+  # OpenCV dependencies
+  opencv_core
+  opencv_imgcodecs
+  opencv_imgproc
+  # ETL
   etl::etl
+  # F´ types
+  ExternalLibraryIntegration/Types
 )
 register_fprime_module()
 
@@ -33,10 +33,6 @@ set(UT_SOURCE_FILES
   "${CMAKE_CURRENT_LIST_DIR}/ImageProcessor.cpp"
   "${CMAKE_CURRENT_LIST_DIR}/test/ut/ImageProcessorTester.cpp"
   "${CMAKE_CURRENT_LIST_DIR}/test/ut/ImageProcessorTestMain.cpp"
-)
-set(UT_MOD_DEPS
-  # UT_MOD_DEPS does not need to include the library dependencies as they are
-  # already included in the module under test
 )
 set(UT_AUTO_HELPERS ON)
 register_fprime_ut()

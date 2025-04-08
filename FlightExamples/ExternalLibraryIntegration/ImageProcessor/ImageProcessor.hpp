@@ -12,7 +12,7 @@
 // ETL Library
 #include "etl/vector.h"
 // OpenCV Library
-// #include <opencv2/opencv.hpp>
+#include <opencv2/opencv.hpp>
 
 namespace ExternalLibraryIntegration {
 
@@ -44,8 +44,7 @@ class ImageProcessor : public ImageProcessorComponentBase {
       ) override;
 
   PRIVATE:
-    etl::vector<U8, 10> m_imageVector;  //!< Vector to hold OpenCV images to be processed
-    // etl::vector<cv::Mat, 10> m_imageVector;  //!< Vector to hold OpenCV images to be processed
+    etl::vector<cv::Mat, 10> m_imageVector;  //!< Vector to hold OpenCV images to be processed
 
 };
 

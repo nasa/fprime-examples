@@ -3,21 +3,31 @@
 ###########################
 # OpenCV needs to be installed on the system before running the build
 # Follow https://docs.opencv.org/4.11.0/d0/d3d/tutorial_general_install.html
-# add_subdirectory("${FPRIME_PROJECT_ROOT}/lib/opencv" "${CMAKE_BINARY_DIR}/opencv")
+
+find_package(OpenCV REQUIRED)
 
 ###########################
-## Fetch ETL library     ##
+## Add ETL library       ##
 ###########################
 # Make ETL available at the project level
 # See https://fprime.jpl.nasa.gov/latest/docs/how-to/integrate-external-libraries 
 # for more information on how to use FetchContent
-include(FetchContent)
-FetchContent_Declare(
-    etl
-    GIT_REPOSITORY https://github.com/ETLCPP/etl
-    GIT_TAG        20.40.0
-)
-FetchContent_MakeAvailable(etl)
+
+# The below FetchContent directives would download the ETL library from GitHub and make it available
+# at the project level. This is not needed since the ETL library is a submodule of the current project
+
+# include(FetchContent)
+# FetchContent_Declare(
+#     etl
+#     GIT_REPOSITORY https://github.com/ETLCPP/etl
+#     GIT_TAG        20.40.0
+# )
+# FetchContent_MakeAvailable(etl)
+
+# Since the ETL library is a submodule of the current project, we can add it directly
+# with add_subdirectory and skip the FetchContent step above
+add_subdirectory("${FPRIME_PROJECT_ROOT}/lib/etl" "${CMAKE_BINARY_DIR}/etl")
+
 
 ###########################
 ## Build OpenSSL library ##

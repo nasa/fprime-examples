@@ -32,9 +32,5 @@ set(UT_SOURCE_FILES
   "${CMAKE_CURRENT_LIST_DIR}/test/ut/OpenSslWrapperTester.cpp"
   "${CMAKE_CURRENT_LIST_DIR}/test/ut/OpenSslWrapperTestMain.cpp"
 )
-set(UT_MOD_DEPS
-  # UT_MOD_DEPS does not need to include the library dependencies as they are
-  # already included in the module under test
-)
 set(UT_AUTO_HELPERS ON)
 register_fprime_ut()
