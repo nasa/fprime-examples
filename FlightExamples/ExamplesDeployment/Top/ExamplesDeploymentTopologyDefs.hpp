@@ -14,6 +14,7 @@
 
 // Subtopology includes
 #include <ManagerWorker/Subtopology/ManagerWorkerTopologyDefs.hpp>
+#include <ExternalLibs/Subtopology/ExternalLibsTopologyDefs.hpp>
 
 // Definitions are placed within a namespace named after the deployment
 namespace ExamplesDeployment {

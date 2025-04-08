@@ -15,6 +15,7 @@ module ExamplesDeployment {
     # Subtopology imports
     # ----------------------------------------------------------------------
     import ManagerWorker.Subtopology
+    import ExternalLibs.Subtopology
 
     # ----------------------------------------------------------------------
     # Instances used in the topology
@@ -47,8 +48,6 @@ module ExamplesDeployment {
     instance rateGroupDriver
     instance textLogger
     instance systemResources
-    instance openSslWrapper
-    instance imageProcessor
 
     # ----------------------------------------------------------------------
     # Pattern graph specifiers
