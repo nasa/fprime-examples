@@ -2,7 +2,7 @@ name: FlightExamples UTs
 
 on:
   push:
-    branches: [ devel, release/** ]
+    branches: [ devel, release/**, pattern/** ]
   pull_request:
     # The branches below must be a subset of the branches above
     branches: [ devel, release/** ]
@@ -17,13 +17,8 @@ jobs:
   build:
     name: ""
     runs-on: ubuntu-latest
+    container: ghcr.io/fprime-community/fprime-examples-builder:latest
     steps:
-
-    # Third-party code - do not upgrade without reviewing
-    - uses: Dovyski/setup-opencv-action@v1.1
-      with:
-        opencv-version: '4.0.0'
-        opencv-extra-modules: false
 
     - name: "Checkout Examples repo"
       uses: actions/checkout@v4
