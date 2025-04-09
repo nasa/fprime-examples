@@ -17,33 +17,38 @@ jobs:
   build:
     name: ""
     runs-on: ubuntu-latest
-    container: ghcr.io/fprime-community/fprime-examples-builder:latest
+    container: 
+      image: ghcr.io/fprime-community/fprime-examples-builder:latest
+      options: --user fprime-user
+
     steps:
+      - name: "Checkout Examples repo"
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
 
-    - name: "Checkout Examples repo"
-      uses: actions/checkout@v4
-      with:
-        submodules: recursive
+      - name: "Overlay nasa/fprime@devel"
+        uses: actions/checkout@v4
+        with:
+          repository: nasa/fprime
+          submodules: true
+          path: ./FlightExamples/lib/fprime
 
-    - name: "Overlay nasa/fprime@devel"
-      uses: actions/checkout@v4
-      with:
-        repository: nasa/fprime
-        submodules: true
-        path: ./FlightExamples/lib/fprime
+      # - name: Setup tmate session
+      #   uses: mxschmitt/action-tmate@v3
 
-    - name: Setup tmate session
-      uses: mxschmitt/action-tmate@v3
+      - name: "Set up F Prime environment"
+        run: |
+          id
+          pwd
 
-    - name: "Set up F Prime environment"
-      run: |
-        pip3 install --prefix ${{ github.workspace }}/.pip -r ./FlightExamples/lib/fprime/requirements.txt
-        echo "${{ github.workspace }}/.pip/local/bin" >> $GITHUB_PATH
+          pip3 install --prefix ${{ github.workspace }}/.pip -r ./FlightExamples/lib/fprime/requirements.txt
+          echo "${{ github.workspace }}/.pip/local/bin" >> $GITHUB_PATH
 
-    - name: "Build & UTs"
-      uses: fprime-community/project-builder@main
-      with:
-        run_unit_tests: true
-        build_location: ./FlightExamples
-        fprime_location: ./FlightExamples/lib/fprime
-        skip_requirements_install: true
+      - name: "Build & UTs"
+        uses: fprime-community/project-builder@main
+        with:
+          run_unit_tests: true
+          build_location: ./FlightExamples
+          fprime_location: ./FlightExamples/lib/fprime
+          skip_requirements_install: true
