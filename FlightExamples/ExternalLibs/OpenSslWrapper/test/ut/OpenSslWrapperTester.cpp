@@ -17,7 +17,7 @@ OpenSslWrapperTester ::OpenSslWrapperTester()
       component("OpenSslWrapper") {
     this->initComponents();
     this->connectPorts();
-    this->testAesKey = CryptoTypes::AesKeyType({
+    this->testAesKey = ExternalLibs::AesKeyType({
         0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77,
         0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77,
         0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77, 0x77,
@@ -56,10 +56,10 @@ void OpenSslWrapperTester ::testAesDecryption() {
     Fw::Buffer iv(iv_data, sizeof(iv_data)); 
     Fw::Buffer encrypted_buff(encrypted_data, sizeof(encrypted_data));
     // Decrypt in place by invoking the aesDecryptIn handler
-    CryptoTypes::DecryptStatus status = this->invoke_to_aesDecryptIn(0, 0, iv, encrypted_buff);
+    ExternalLibs::DecryptStatus status = this->invoke_to_aesDecryptIn(0, 0, iv, encrypted_buff);
     
     // Assert the decryption status and check the decrypted data
-    ASSERT_EQ(status, CryptoTypes::DecryptStatus::OK);
+    ASSERT_EQ(status, ExternalLibs::DecryptStatus::OK);
     // printf("Decrypted data: ");
     for (FwSizeType i = 0; i < sizeof(decrypted_data); ++i) {
         // printf("%02x ", encrypted_buff.getData()[i]);
@@ -83,10 +83,10 @@ void OpenSslWrapperTester ::testAesEncryption() {
   Fw::Buffer iv(iv_data, sizeof(iv_data)); 
   Fw::Buffer decrypted_buff(decrypted_data, sizeof(decrypted_data));
   // Decrypt in place by invoking the aesDecryptIn handler
-  CryptoTypes::DecryptStatus status = this->invoke_to_aesEncryptIn(0, 0, iv, decrypted_buff);
+  ExternalLibs::DecryptStatus status = this->invoke_to_aesEncryptIn(0, 0, iv, decrypted_buff);
   
   // Assert the encryption status and check the decrypted data
-  ASSERT_EQ(status, CryptoTypes::DecryptStatus::OK);
+  ASSERT_EQ(status, ExternalLibs::DecryptStatus::OK);
   for (FwSizeType i = 0; i < sizeof(decrypted_data); ++i) {
       ASSERT_EQ(decrypted_buff.getData()[i], encrypted_data[i]); // Ensure decrypted data matches expected
   }

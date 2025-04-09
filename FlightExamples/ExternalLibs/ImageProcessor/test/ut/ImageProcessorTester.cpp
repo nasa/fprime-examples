@@ -25,6 +25,7 @@ ImageProcessorTester ::~ImageProcessorTester() {}
 // ----------------------------------------------------------------------
 
 void ImageProcessorTester ::testReadImage() {
+    // no-op
     this->clearEvents();
 }
 

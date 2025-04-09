@@ -67,7 +67,7 @@ class OpenSslWrapperTester final : public OpenSslWrapperGTestBase {
 
     //! The component under test
     OpenSslWrapper component;
-    CryptoTypes::AesKeyType testAesKey;  //!< AES key for testing
+    ExternalLibs::AesKeyType testAesKey;  //!< AES key for testing
 };
 
 }  // namespace ExternalLibs
