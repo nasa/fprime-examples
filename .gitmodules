@@ -4,3 +4,6 @@
 [submodule "FlightExamples/lib/openssl"]
 	path = FlightExamples/lib/openssl
 	url = https://github.com/openssl/openssl
+[submodule "FlightExamples/lib/etl"]
+	path = FlightExamples/lib/etl
+	url = https://github.com/ETLCPP/etl
