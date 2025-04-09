@@ -34,7 +34,7 @@ jobs:
     
     - name: "Set up F Prime environment"
       run: |
-        pip3 install --prefix ${{ github.workspace }}/.pip -r ./FlightExamples/lib/fprime/requirements.txt
+        pip3 install --user --prefix ${{ github.workspace }}/.pip -r ./FlightExamples/lib/fprime/requirements.txt
         echo "${{ github.workspace }}/.pip/local/bin" >> $GITHUB_PATH
 
     - name: "Build & UTs"
