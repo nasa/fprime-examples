@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     container: 
       image: ghcr.io/fprime-community/fprime-examples-builder:latest
-      options: --user fprime-user
+      # options: --user fprime-user
 
     steps:
       - name: "Checkout Examples repo"
