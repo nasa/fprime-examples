@@ -34,8 +34,8 @@ jobs:
     
     - name: "Set up F Prime environment"
       run: |
-        pip3 install --break-system-packages -r ./FlightExamples/lib/fprime/requirements.txt
-        echo "${{ github.workspace }}/FlightExamples/lib/fprime/.local/bin" >> $GITHUB_PATH
+        pip3 install --prefix ${{ github.workspace }}/.pip -r ./FlightExamples/lib/fprime/requirements.txt
+        echo "${{ github.workspace }}/.pip/local/bin" >> $GITHUB_PATH
 
     - name: "Build & UTs"
       uses: fprime-community/project-builder@main
