@@ -34,9 +34,6 @@ jobs:
           submodules: true
           path: ./FlightExamples/lib/fprime
 
-      # - name: Setup tmate session
-      #   uses: mxschmitt/action-tmate@v3
-
       - name: "Set up F Prime environment"
         run: |
           id
@@ -44,6 +41,9 @@ jobs:
 
           pip3 install --prefix ${{ github.workspace }}/.pip -r ./FlightExamples/lib/fprime/requirements.txt
           echo "${{ github.workspace }}/.pip/local/bin" >> $GITHUB_PATH
+
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
 
       - name: "Build & UTs"
         uses: fprime-community/project-builder@main
