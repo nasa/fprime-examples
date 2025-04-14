@@ -4,10 +4,14 @@
 # OpenCV needs to be installed on the system before running the build
 # Follow https://docs.opencv.org/4.11.0/d0/d3d/tutorial_general_install.html
 
-find_package(OpenCV REQUIRED)
-message(STATUS "Found OpenCV: ${OpenCV_INCLUDE_DIRS}")
-message(STATUS "OpenCV version: ${OpenCV_VERSION}")
-message(STATUS "OpenCV libraries: ${OpenCV_LIBS}")
+if (EXAMPLES_USE_OPENCV)
+    find_package(OpenCV REQUIRED)
+    message(STATUS "Found OpenCV: ${OpenCV_INCLUDE_DIRS}")
+    message(STATUS "OpenCV version: ${OpenCV_VERSION}")
+    message(STATUS "OpenCV libraries: ${OpenCV_LIBS}")
+elseif()
+    message(STATUS "OpenCV not enabled for this build. Use -DEXAMPLES_USE_OPENCV to use OpenCV.")
+endif()
 
 ###########################
 ## Add ETL library       ##
@@ -43,19 +47,19 @@ set(OPENSSL_INCLUDE_DIR ${OPENSSL_INSTALL_DIR}/include)
 set(OPENSSL_LIBCRYPTO_LIB ${OPENSSL_INSTALL_DIR}/lib/libcrypto.a)
 
 ExternalProject_Add(
-  OpenSSL
-  SOURCE_DIR ${OPENSSL_SOURCE_DIR}
-  CONFIGURE_COMMAND
-    ${OPENSSL_SOURCE_DIR}/config
-    --prefix=${OPENSSL_INSTALL_DIR}
-    --openssldir=${OPENSSL_INSTALL_DIR}
-    --libdir=lib # this makes sure libcrypto.a is in lib/ (e.g. instead of lib64 on some systems)
-    no-tests
-  BUILD_COMMAND make -j8 build_generated libcrypto.a
-  TEST_COMMAND ""
-  INSTALL_COMMAND make install_sw
-  INSTALL_DIR ${OPENSSL_INSTALL_DIR}
-  BUILD_BYPRODUCTS ${OPENSSL_LIBCRYPTO_LIB} # allows the build to know libcrypto.a is a byproduct of this ExternalProject_Add
+    OpenSSL
+    SOURCE_DIR ${OPENSSL_SOURCE_DIR}
+    CONFIGURE_COMMAND
+        ${OPENSSL_SOURCE_DIR}/config
+        --prefix=${OPENSSL_INSTALL_DIR}
+        --openssldir=${OPENSSL_INSTALL_DIR}
+        --libdir=lib # this makes sure libcrypto.a is in lib/ (e.g. instead of lib64 on some systems)
+        no-tests
+    BUILD_COMMAND make -j8 build_generated libcrypto.a
+    TEST_COMMAND ""
+    INSTALL_COMMAND make install_sw
+    INSTALL_DIR ${OPENSSL_INSTALL_DIR}
+    BUILD_BYPRODUCTS ${OPENSSL_INCLUDE_DIR} ${OPENSSL_LIBCRYPTO_LIB} # allows the build to know libcrypto.a is a byproduct of this ExternalProject_Add
 )
 # Since ExternalProject_Add will only build OpenSSL at project-build-time, we need to create the
 # include directory so it exists at project-configure-time
@@ -71,5 +75,8 @@ add_dependencies(OpenSSL::Crypto OpenSSL)
 ###########################
 add_fprime_subdirectory("${CMAKE_CURRENT_LIST_DIR}/Types/")
 add_fprime_subdirectory("${CMAKE_CURRENT_LIST_DIR}/OpenSslWrapper/")
-add_fprime_subdirectory("${CMAKE_CURRENT_LIST_DIR}/ImageProcessor/")
 add_fprime_subdirectory("${CMAKE_CURRENT_LIST_DIR}/Subtopology/")
+
+if (EXAMPLES_USE_OPENCV)
+    add_fprime_subdirectory("${CMAKE_CURRENT_LIST_DIR}/ImageProcessor/")
+endif()

@@ -14,7 +14,6 @@ namespace ExternalLibs {
 
 ImageProcessor ::ImageProcessor(const char* const compName) : ImageProcessorComponentBase(compName) {
     // Initialize the image vector with a fixed size (10 in this case)
-    printf("AAAAAAAAAA ImageProcessor constructor\n");
     this->m_imageVector.resize(10);
 }
 
