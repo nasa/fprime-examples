@@ -5,12 +5,12 @@
 # Follow https://docs.opencv.org/4.11.0/d0/d3d/tutorial_general_install.html
 
 if (EXAMPLES_NO_OPENCV)
-    message(STATUS "OpenCV disabled for this build. Use -DEXAMPLES_USE_OPENCV to use OpenCV.")
+    message(STATUS "[OpenCV] OpenCV disabled for this build. Use -DEXAMPLES_USE_OPENCV to use OpenCV.")
 elseif()
     find_package(OpenCV REQUIRED)
-    message(STATUS "Found OpenCV: ${OpenCV_INCLUDE_DIRS}")
-    message(STATUS "OpenCV version: ${OpenCV_VERSION}")
-    message(STATUS "OpenCV libraries: ${OpenCV_LIBS}")
+    message(STATUS "[OpenCV] Found OpenCV: ${OpenCV_INCLUDE_DIRS}")
+    message(STATUS "[OpenCV] OpenCV version: ${OpenCV_VERSION}")
+    message(STATUS "[OpenCV] OpenCV libraries: ${OpenCV_LIBS}")
 endif()
 
 ###########################
@@ -76,6 +76,8 @@ add_dependencies(OpenSSL::Crypto OpenSSL)
 add_fprime_subdirectory("${CMAKE_CURRENT_LIST_DIR}/Types/")
 add_fprime_subdirectory("${CMAKE_CURRENT_LIST_DIR}/OpenSslWrapper/")
 add_fprime_subdirectory("${CMAKE_CURRENT_LIST_DIR}/Subtopology/")
-if (not EXAMPLES_NO_OPENCV)
+if (EXAMPLES_NO_OPENCV)
+    message(STATUS "[OpenCV] OpenCV disabled: Skipping ImageProcessor module.")
+else()
     add_fprime_subdirectory("${CMAKE_CURRENT_LIST_DIR}/ImageProcessor/")
 endif()
