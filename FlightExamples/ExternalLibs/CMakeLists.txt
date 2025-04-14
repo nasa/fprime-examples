@@ -40,6 +40,7 @@ include(ExternalProject)
 set(OPENSSL_SOURCE_DIR ${FPRIME_PROJECT_ROOT}/lib/openssl)
 set(OPENSSL_INSTALL_DIR ${CMAKE_BINARY_DIR}/openssl)
 set(OPENSSL_INCLUDE_DIR ${OPENSSL_INSTALL_DIR}/include)
+set(OPENSSL_LIBCRYPTO_LIB ${OPENSSL_INSTALL_DIR}/lib/libcrypto.a)
 
 ExternalProject_Add(
   OpenSSL
@@ -48,17 +49,20 @@ ExternalProject_Add(
     ${OPENSSL_SOURCE_DIR}/config
     --prefix=${OPENSSL_INSTALL_DIR}
     --openssldir=${OPENSSL_INSTALL_DIR}
-  BUILD_COMMAND make
+    --libdir=lib # this makes sure libcrypto.a is in lib/ (e.g. instead of lib64 on some systems)
+    no-tests
+  BUILD_COMMAND make -j8 build_generated libcrypto.a
   TEST_COMMAND ""
   INSTALL_COMMAND make install_sw
   INSTALL_DIR ${OPENSSL_INSTALL_DIR}
+  BUILD_BYPRODUCTS ${OPENSSL_LIBCRYPTO_LIB} # allows the build to know libcrypto.a is a byproduct of this ExternalProject_Add
 )
 # Since ExternalProject_Add will only build OpenSSL at project-build-time, we need to create the
 # include directory so it exists at project-configure-time
 file(MAKE_DIRECTORY ${OPENSSL_INCLUDE_DIR})
 # Declare the properties needed for the OpenSSL::Crypto library
 add_library(OpenSSL::Crypto STATIC IMPORTED GLOBAL)
-set_property(TARGET OpenSSL::Crypto PROPERTY IMPORTED_LOCATION ${OPENSSL_INSTALL_DIR}/lib/libcrypto.a)
+set_property(TARGET OpenSSL::Crypto PROPERTY IMPORTED_LOCATION ${OPENSSL_LIBCRYPTO_LIB})
 set_property(TARGET OpenSSL::Crypto PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${OPENSSL_INCLUDE_DIR})
 add_dependencies(OpenSSL::Crypto OpenSSL)
 
