@@ -19,7 +19,6 @@ jobs:
     runs-on: ubuntu-latest
     container: 
       image: ghcr.io/fprime-community/fprime-examples-builder:latest
-      # options: --user fprime-user
 
     steps:
       - name: "Checkout Examples repo"
@@ -44,3 +43,4 @@ jobs:
           build_location: ./FlightExamples
           fprime_location: ./FlightExamples/lib/fprime
           skip_requirements_install: true
+          extra_generate_args: "-DFPRIME_EXAMPLES_USE_OPENCV=ON"

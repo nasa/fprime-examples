@@ -29,6 +29,8 @@ namespace ExamplesDeployment {
 struct TopologyState {
     const CHAR* hostname;
     U16 port;
+    ManagerWorker::ManagerWorkerState ManagerWorker_state;
+    ExternalLibs::ExternalLibsState ExternalLibs_state;
 };
 
 /**
