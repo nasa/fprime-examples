@@ -23,9 +23,7 @@ using namespace ExamplesDeployment;
 // initialization phase.
 Fw::MallocAllocator mallocator;
 
-// The reference topology uses the F´ packet protocol when communicating with the ground and therefore uses the F´
-// framing and deframing implementations.
-Svc::FprimeFraming framing;
+// The reference topology uses the F´ packet protocol when communicating with the ground
 Svc::FrameDetectors::FprimeFrameDetector frameDetector;
 
 Svc::ComQueue::QueueConfigurationTable configurationTable;
@@ -93,8 +91,7 @@ void configureTopology(const TopologyState& state) {
     upBuffMgrBins.bins[2].numBuffers = COM_DRIVER_BUFFER_COUNT;
     bufferManager.setup(BUFFER_MANAGER_ID, 0, mallocator, upBuffMgrBins);
 
-    // Framer and Deframer components need to be passed a protocol handler
-    framer.setup(framing);
+    // Use the default F Prime detector
     frameAccumulator.configure(frameDetector, 1, mallocator, 2048);
 
     // Command sequencer needs to allocate memory to hold contents of command sequences
