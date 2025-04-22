@@ -62,7 +62,7 @@ add_fprime_subdirectory("${CMAKE_CURRENT_LIST_DIR}/Types/")
 add_fprime_subdirectory("${CMAKE_CURRENT_LIST_DIR}/OpenSslWrapper/")
 
 if (FPRIME_EXAMPLES_USE_OPENCV)
-    find_package(OpenCV REQUIRED)
+    find_package(OpenCV REQUIRED GLOBAL) # note: need GLOBAL for F Prime introspection
     message(STATUS "[OpenCV] Found OpenCV version ${OpenCV_VERSION} at ${OpenCV_INCLUDE_DIRS}")
     message(STATUS "[OpenCV] OpenCV libraries: ${OpenCV_LIBS}")
     add_fprime_subdirectory("${CMAKE_CURRENT_LIST_DIR}/ImageProcessor/")
