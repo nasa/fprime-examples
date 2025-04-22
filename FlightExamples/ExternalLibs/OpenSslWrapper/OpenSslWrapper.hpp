@@ -10,6 +10,7 @@
 #define OPENSSL_API_COMPAT 30100 // this is openssl v3.1.0
 
 #include <openssl/evp.h>
+#include "etl/vector.h"
 
 #include "ExternalLibs/OpenSslWrapper/OpenSslWrapperComponentAc.hpp"
 
@@ -103,6 +104,8 @@ class OpenSslWrapper : public OpenSslWrapperComponentBase {
     // OpenSSL types for AES methods
     EVP_CIPHER* m_cipherMethod;
     EVP_CIPHER_CTX* m_cipherCtx;
+
+    etl::vector<U8, 10> m_unused;  //!< Unused vector, proving ETL is used properly
 };
 
 }  // namespace ExternalLibs

@@ -60,9 +60,14 @@ add_dependencies(OpenSSL::Crypto OpenSSL)
 ###########################
 add_fprime_subdirectory("${CMAKE_CURRENT_LIST_DIR}/Types/")
 add_fprime_subdirectory("${CMAKE_CURRENT_LIST_DIR}/OpenSslWrapper/")
-add_fprime_subdirectory("${CMAKE_CURRENT_LIST_DIR}/Subtopology/")
+
 if (FPRIME_EXAMPLES_USE_OPENCV)
+    find_package(OpenCV REQUIRED)
+    message(STATUS "[OpenCV] Found OpenCV version ${OpenCV_VERSION} at ${OpenCV_INCLUDE_DIRS}")
+    message(STATUS "[OpenCV] OpenCV libraries: ${OpenCV_LIBS}")
     add_fprime_subdirectory("${CMAKE_CURRENT_LIST_DIR}/ImageProcessor/")
 else()
     message(STATUS "[OpenCV] OpenCV disabled: Skipping ImageProcessor module.")
 endif()
+
+add_fprime_subdirectory("${CMAKE_CURRENT_LIST_DIR}/Subtopology/")

@@ -4,12 +4,6 @@
 # OpenCV needs to be installed on the system before running the build
 # Follow https://docs.opencv.org/4.11.0/d0/d3d/tutorial_general_install.html
 
-find_package(OpenCV REQUIRED)
-message(STATUS "[OpenCV] Found OpenCV: ${OpenCV_INCLUDE_DIRS}")
-message(STATUS "[OpenCV] OpenCV version: ${OpenCV_VERSION}")
-message(STATUS "[OpenCV] OpenCV libraries: ${OpenCV_LIBS}")
-
-
 set(SOURCE_FILES
   "${CMAKE_CURRENT_LIST_DIR}/ImageProcessor.fpp"
   "${CMAKE_CURRENT_LIST_DIR}/ImageProcessor.cpp"
