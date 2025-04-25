@@ -50,7 +50,7 @@ ExternalProject_Add(
 # include directory so it exists at project-configure-time
 file(MAKE_DIRECTORY ${OPENSSL_INCLUDE_DIR})
 # Declare the properties needed for the OpenSSL::Crypto library
-add_library(OpenSSL::Crypto STATIC IMPORTED GLOBAL)
+add_library(OpenSSL::Crypto STATIC IMPORTED GLOBAL) # IMPORTED libraries need to be GLOBAL
 set_property(TARGET OpenSSL::Crypto PROPERTY IMPORTED_LOCATION ${OPENSSL_LIBCRYPTO_LIB})
 set_property(TARGET OpenSSL::Crypto PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${OPENSSL_INCLUDE_DIR})
 add_dependencies(OpenSSL::Crypto OpenSSL)
@@ -60,14 +60,11 @@ add_dependencies(OpenSSL::Crypto OpenSSL)
 ###########################
 add_fprime_subdirectory("${CMAKE_CURRENT_LIST_DIR}/Types/")
 add_fprime_subdirectory("${CMAKE_CURRENT_LIST_DIR}/OpenSslWrapper/")
-
 if (FPRIME_EXAMPLES_USE_OPENCV)
-    find_package(OpenCV REQUIRED GLOBAL) # note: need GLOBAL for F Prime introspection
-    message(STATUS "[OpenCV] Found OpenCV version ${OpenCV_VERSION} at ${OpenCV_INCLUDE_DIRS}")
-    message(STATUS "[OpenCV] OpenCV libraries: ${OpenCV_LIBS}")
     add_fprime_subdirectory("${CMAKE_CURRENT_LIST_DIR}/ImageProcessor/")
 else()
     message(STATUS "[OpenCV] OpenCV disabled: Skipping ImageProcessor module.")
 endif()
+
 
 add_fprime_subdirectory("${CMAKE_CURRENT_LIST_DIR}/Subtopology/")
