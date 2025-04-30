@@ -70,26 +70,32 @@ module ExamplesDeployment {
     # Direct graph specifiers
     # ----------------------------------------------------------------------
 
+
     connections Downlink {
+      # Inputs to ComQueue (events, telemetry, file)
+      eventLogger.PktSend         -> comQueue.comPacketQueueIn[0]
+      tlmSend.PktSend             -> comQueue.comPacketQueueIn[1]
+      fileDownlink.bufferSendOut  -> comQueue.bufferQueueIn[0]
+      comQueue.bufferReturnOut[0] -> fileDownlink.bufferReturn
 
-      eventLogger.PktSend -> comQueue.comQueueIn[0]
-      tlmSend.PktSend -> comQueue.comQueueIn[1]
-      fileDownlink.bufferSendOut -> comQueue.buffQueueIn[0]
+      # ComQueue <-> Framer
+      comQueue.queueSend   -> framer.dataIn
+      framer.dataReturnOut -> comQueue.bufferReturnIn
+      framer.comStatusOut  -> comQueue.comStatusIn
 
-      comQueue.comQueueSend -> framer.comIn
-      comQueue.buffQueueSend -> framer.bufferIn
+      # Buffer Management for Framer
+      framer.bufferAllocate   -> bufferManager.bufferGetCallee
+      framer.bufferDeallocate -> bufferManager.bufferSendIn
 
-      framer.framedAllocate -> bufferManager.bufferGetCallee
-      framer.framedOut -> comStub.comDataIn
-      framer.bufferDeallocate -> fileDownlink.bufferReturn
+      # Framer <-> ComStub
+      framer.dataOut        -> comStub.comDataIn
+      comStub.dataReturnOut -> framer.dataReturnIn
+      comStub.comStatusOut  -> framer.comStatusIn
 
-      comDriver.deallocate -> bufferManager.bufferSendIn
-      comDriver.ready -> comStub.drvConnected
-
-      comStub.comStatus -> framer.comStatusIn
-      framer.comStatusOut -> comQueue.comStatusIn
-      comStub.drvDataOut -> comDriver.$send
-
+      # ComStub <-> ComDriver
+      comStub.drvDataOut      -> comDriver.$send
+      comDriver.dataReturnOut -> comStub.dataReturnIn
+      comDriver.ready         -> comStub.drvConnected
     }
 
     connections FaultProtection {

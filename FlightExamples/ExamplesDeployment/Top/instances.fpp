@@ -101,7 +101,7 @@ module ExamplesDeployment {
   @ Communications driver. May be swapped with other com drivers like UART or TCP
   instance comDriver: Drv.TcpClient base id 0x4000
 
-  instance framer: Svc.Framer base id 0x4100
+  instance framer: Svc.FprimeFramer base id 0x4100
 
   instance fatalAdapter: Svc.AssertFatalAdapter base id 0x4200
 
