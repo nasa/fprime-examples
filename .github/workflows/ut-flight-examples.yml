@@ -2,7 +2,7 @@ name: FlightExamples UTs
 
 on:
   push:
-    branches: [ devel, release/** ]
+    branches: [ devel, release/**, pattern/** ]
   pull_request:
     # The branches below must be a subset of the branches above
     branches: [ devel, release/** ]
@@ -17,21 +17,30 @@ jobs:
   build:
     name: ""
     runs-on: ubuntu-latest
+    container: 
+      image: ghcr.io/fprime-community/fprime-examples-builder:latest
+
     steps:
+      - name: "Checkout Examples repo"
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
 
-    - name: "Checkout Examples repo"
-      uses: actions/checkout@v4
+      - name: "Overlay nasa/fprime@devel"
+        uses: actions/checkout@v4
+        with:
+          repository: nasa/fprime
+          submodules: true
+          path: ./FlightExamples/lib/fprime
 
-    - name: "Overlay nasa/fprime@devel"
-      uses: actions/checkout@v4
-      with:
-        repository: nasa/fprime
-        submodules: true
-        path: ./FlightExamples/lib/fprime
+      - name: "Set up F Prime environment"
+        run: pip3 install --break-system-packages -r ./FlightExamples/lib/fprime/requirements.txt
 
-    - name: "Build & UTs"
-      uses: fprime-community/project-builder@main
-      with:
-        run_unit_tests: true
-        build_location: ./FlightExamples
-        fprime_location: ./FlightExamples/lib/fprime
+      - name: "Build & UTs"
+        uses: fprime-community/project-builder@main
+        with:
+          run_unit_tests: true
+          build_location: ./FlightExamples
+          fprime_location: ./FlightExamples/lib/fprime
+          skip_requirements_install: true
+          extra_generate_args: "-DFPRIME_EXAMPLES_USE_OPENCV=ON"

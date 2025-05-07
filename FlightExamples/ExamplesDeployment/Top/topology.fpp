@@ -15,6 +15,7 @@ module ExamplesDeployment {
     # Subtopology imports
     # ----------------------------------------------------------------------
     import ManagerWorker.Subtopology
+    import ExternalLibs.Subtopology
 
     # ----------------------------------------------------------------------
     # Instances used in the topology

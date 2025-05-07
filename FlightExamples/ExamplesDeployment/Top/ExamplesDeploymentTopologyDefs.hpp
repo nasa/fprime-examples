@@ -14,6 +14,7 @@
 
 // Subtopology includes
 #include <ManagerWorker/Subtopology/ManagerWorkerTopologyDefs.hpp>
+#include <ExternalLibs/Subtopology/ExternalLibsTopologyDefs.hpp>
 
 // Definitions are placed within a namespace named after the deployment
 namespace ExamplesDeployment {
@@ -28,6 +29,8 @@ namespace ExamplesDeployment {
 struct TopologyState {
     const CHAR* hostname;
     U16 port;
+    ManagerWorker::ManagerWorkerState ManagerWorker_state;
+    ExternalLibs::ExternalLibsState ExternalLibs_state;
 };
 
 /**

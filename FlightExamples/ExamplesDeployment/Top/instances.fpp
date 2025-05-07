@@ -124,4 +124,5 @@ module ExamplesDeployment {
   instance frameAccumulator: Svc.FrameAccumulator base id 0x4C00
 
   instance fprimeRouter: Svc.FprimeRouter base id 0x4D00
+
 }

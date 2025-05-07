@@ -6,9 +6,6 @@ namespace ManagerWorker {
         /* include any variables that are needed for 
         configuring/starting/tearing down the topology */
     };
-    struct TopologyState {
-        ManagerWorkerState ManagerWorker_state;
-    };
 }
 
 namespace GlobalDefs {

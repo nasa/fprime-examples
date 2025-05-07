@@ -1,0 +1,20 @@
+# fprime items
+logs/
+cmake-build-*
+build-artifacts/
+build-fprime-*
+*-template
+*.template.cpp
+*.template.hpp
+lib/
+
+# Misc
+/.idea/
+/.vscode/
+.DS_Store
+*.gcov
+
+# Python and Pytest
+venv/
+fprime-venv/
+__pycache__/
