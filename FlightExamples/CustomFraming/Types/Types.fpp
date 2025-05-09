@@ -8,7 +8,7 @@ module Types {
         startWord: TokenType,
         lengthField: TokenType,
     } default {
-        startWord = 0xDECAF000
+        startWord = 0xDECAFBAD
     }
 
     @ Describes the frame trailer format for the F Prime communications protocol

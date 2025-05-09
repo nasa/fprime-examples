@@ -1,7 +1,4 @@
-""" fprime_encryption.ccsds: implementation of framing plugin to support CCSDS
-
-This file registers a CCSDS plugin and a space-packet plugin used to frame data for use transmitting F´ data within a
-CCSDS frame.
+""" implementation of framing plugin to support a minimal protocol
 """
 import struct
 import sys
@@ -20,7 +17,7 @@ class DecafFramerDeframer(FramerDeframer):
 
     This implementation is registered as a "framing" plugin to support encryption within the GDS layer.
     """
-    START_TOKEN = 0x000DECAF
+    START_TOKEN = 0xDECAFBAD
     HEADER_TOKEN_FORMAT = ">I"
     HEADER_SIZE = 8   # 4 bytes for start token + 4 bytes for size
     TRAILER_SIZE = 4  # 4 bytes CRC32 checksum
