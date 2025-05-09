@@ -40,7 +40,7 @@ Documentation = "https://nasa.github.io/fprime/"
 Repository = "https://github.com/fprime-community/fprime-gds"
 
 [project.entry-points.fprime_gds]
-space_packet = "framing.decaf_framing:DecafFramerDeframer"
+decaf_framing = "framing.decaf_framing:DecafFramerDeframer"
 
 ####
 # setuptools_scm dynamically generates version number from git, as well as automatically
