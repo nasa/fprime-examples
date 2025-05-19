@@ -3,12 +3,12 @@ requires = ["setuptools", "setuptools_scm[toml]>=6.2", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "fprime-examples-plugins"
+name = "gds-plugins"
 description = "F Prime GDS Plugin Examples"
 dynamic = ["version"]
 dependencies = [
     "pluggy>=1.3.0",
-    "fprime-gds>=3.4.4a1",
+    "fprime-gds>=3.6.2",
 ]
 readme = "README.md"
 requires-python = ">=3.9"
@@ -36,7 +36,7 @@ classifiers = [
 ]
 [project.urls]
 Homepage = "https://fprime.jpl.nasa.gov"
-Documentation = "https://nasa.github.io/fprime/"
+Documentation = "https://fprime.jpl.nasa.gov/docs"
 Repository = "https://github.com/fprime-community/fprime-gds"
 
 [project.entry-points.fprime_gds]

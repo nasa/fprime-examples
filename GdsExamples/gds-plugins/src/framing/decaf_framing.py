@@ -2,7 +2,6 @@
 """
 import struct
 import sys
-from typing import List, Type
 import copy
 
 from fprime.common.models.serialize.numerical_types import U32Type
@@ -13,9 +12,7 @@ from fprime_gds.common.communication.checksum import calculate_checksum
 
 @gds_plugin(FramerDeframer)
 class DecafFramerDeframer(FramerDeframer):
-    """ Concrete implementation of FramerDeframer supporting encryption
-
-    This implementation is registered as a "framing" plugin to support encryption within the GDS layer.
+    """ Implementation of a framing plugin to support a "Decaf" protocol
     """
     START_TOKEN = 0xDECAFBAD
     HEADER_TOKEN_FORMAT = ">I"
