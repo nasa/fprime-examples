@@ -25,13 +25,7 @@ class DecafFramerDeframer(FramerDeframer):
         self.sequence_number = 0
 
     def frame(self, data):
-        """ Frame the supplied data
-
-        Args:
-            data: data to frame
-        Return:
-            encrypted bytes
-        """
+        """ Frame the supplied data according to the Decaf protocol. """
         framed = struct.pack(
             ">I", self.START_TOKEN
         )
@@ -44,7 +38,16 @@ class DecafFramerDeframer(FramerDeframer):
 
 
     def deframe(self, data, no_copy=False):
-        """ No op deframe step """
+        """ Attempt to deframe the supplied data stream, returning the first packet found.
+        
+        This will look for the start and size tokens in the data stream. If any of the following checks fail, the first 
+        byte of the stream will be discarded and the process will continue until no data is left or a valid packet is found.
+
+        1. Looks at the beginning of the stream, and discards data until it find a valid start token. 
+        2. Read length token, validate data length
+        3. Compute CRC of the message and compare it with the transmitted CRC
+        4. If all checks pass, return the data and the remaining stream.
+        """
         discarded = b""
         if not no_copy:
             data = copy.copy(data)
