@@ -4,11 +4,11 @@
 // \brief  hpp file for DecafDeframer component test harness implementation class
 // ======================================================================
 
-#ifndef Svc_DecafDeframerTester_HPP
-#define Svc_DecafDeframerTester_HPP
+#ifndef CustomFraming_DecafDeframerTester_HPP
+#define CustomFraming_DecafDeframerTester_HPP
 
-#include "Svc/DecafDeframer/DecafDeframer.hpp"
-#include "Svc/DecafDeframer/DecafDeframerGTestBase.hpp"
+#include "CustomFraming/DecafDeframer/DecafDeframer.hpp"
+#include "CustomFraming/DecafDeframer/DecafDeframerGTestBase.hpp"
 
 namespace CustomFraming {
 

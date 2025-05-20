@@ -5,8 +5,8 @@
 // ======================================================================
 
 #include "DecafFramerTester.hpp"
-#include "Svc/FprimeProtocol/FrameHeaderSerializableAc.hpp"
-#include "Svc/FprimeProtocol/FrameTrailerSerializableAc.hpp"
+#include "CustomFraming/Types/FrameHeaderSerializableAc.hpp"
+#include "CustomFraming/Types/FrameTrailerSerializableAc.hpp"
 
 namespace CustomFraming {
 
@@ -65,16 +65,16 @@ void DecafFramerTester ::testNominalFraming() {
 
     Fw::Buffer outputBuffer = this->fromPortHistory_dataOut->at(0).data;
     // Check the size of the output buffer
-    ASSERT_EQ(outputBuffer.getSize(), sizeof(bufferData) + FprimeProtocol::FrameHeader::SERIALIZED_SIZE + FprimeProtocol::FrameTrailer::SERIALIZED_SIZE);
+    ASSERT_EQ(outputBuffer.getSize(), sizeof(bufferData) + Types::FrameHeader::SERIALIZED_SIZE + Types::FrameTrailer::SERIALIZED_SIZE);
     // Check header
-    FprimeProtocol::FrameHeader defaultHeader;
-    FprimeProtocol::FrameHeader outputHeader;
+    Types::FrameHeader defaultHeader;
+    Types::FrameHeader outputHeader;
     outputBuffer.getDeserializer().deserialize(outputHeader);
     ASSERT_EQ(outputHeader.getstartWord(), defaultHeader.getstartWord());
     ASSERT_EQ(outputHeader.getlengthField(), sizeof(bufferData));
     // Check data
     for (U32 i = 0; i < sizeof(bufferData); ++i) {
-        ASSERT_EQ(outputBuffer.getData()[i + FprimeProtocol::FrameHeader::SERIALIZED_SIZE], bufferData[i]);
+        ASSERT_EQ(outputBuffer.getData()[i + Types::FrameHeader::SERIALIZED_SIZE], bufferData[i]);
     }
 }
 

@@ -7,17 +7,17 @@
 #include "DecafFramerTester.hpp"
 
 TEST(Nominal, testComStatusPassThrough) {
-    Svc::DecafFramerTester tester;
+    CustomFraming::DecafFramerTester tester;
     tester.testComStatusPassThrough();
 }
 
 TEST(Nominal, testFrameDeallocation) {
-    Svc::DecafFramerTester tester;
+    CustomFraming::DecafFramerTester tester;
     tester.testFrameDeallocation();
 }
 
 TEST(Nominal, testNominalFraming) {
-    Svc::DecafFramerTester tester;
+    CustomFraming::DecafFramerTester tester;
     tester.testNominalFraming();
 }
 

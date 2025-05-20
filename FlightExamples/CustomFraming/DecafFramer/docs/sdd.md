@@ -1,14 +1,6 @@
 # Svc::DecafFramer
 
-The `Svc::DecafFramer` is an implementation of the [FramerInterface](../../Interfaces/docs/sdd.md) for the F Prime protocol. 
-
-It receives data (an F´ packet) on input and produces an [F´ frame](../../FprimeProtocol/docs/sdd.md) on its output port as a result. Please refer to the [F Prime frame specification](../../FprimeProtocol/docs/sdd.md) for details on the frame format.
-
-It is designed to receive packets from a [`Svc::ComQueue`](../../ComQueue/docs/sdd.md) and passes frames to a [Communications Adapter](../../Interfaces/docs/sdd.md), such as a Radio manager component or [`Svc::ComStub`](../../ComStub/docs/sdd.md), for transmission on the wire.
-
-## Usage Examples
-
-The `Svc::DecafFramer` component is used in the uplink stack of many reference F´ application such as [the tutorials source code](https://github.com/fprime-community#tutorials).
+The `Svc::DecafFramer` is an implementation of the FramerInterface for the [Decaf protocol](../../README.md). 
 
 ## Internals
 
@@ -16,8 +8,8 @@ The `Svc::DecafFramer` receives data packets of type `Svc.ComDataWithContext`. T
 
 On receiving a data packet, the `Svc::DecafFramer` performs the following actions:
 
-1. Allocates a new _`outBuffer`_ (of type `Fw::Buffer`) to hold the F´ frame, of size _`size(dataPacket) + size(FprimeHeader) + size(FprimeTrailer)`_
-2. Serializes the F´ start word (`0xDEADBEEF`) and length token (`size(dataPacket)`) into _`outBuffer`_
+1. Allocates a new _`outBuffer`_ (of type `Fw::Buffer`) to hold the F´ frame, of size _`size(dataPacket) + size(DecafHeader) + size(DecafTrailer)`_
+2. Serializes the F´ start word (`0xDECAFBAD`) and length token (`size(dataPacket)`) into _`outBuffer`_
 3. Serializes the F´ packet data into _`outBuffer`_
 4. Computes and serializes a CRC32 checksum into _`outBuffer`_
 5. Emits the _`outBuffer`_ on the `dataOut` output port. Ownership of _`outBuffer`_ is handed to the receiver
@@ -38,8 +30,8 @@ On receiving a data packet, the `Svc::DecafFramer` performs the following action
 
 | Name | Description | Validation |
 |---|---|---|
-| SVC-FPRIME_FRAMER-001 | `Svc::DecafFramer` shall accept data buffers (packets) stored in `Fw::Buffer` through its `dataIn` input port | Unit Test |
-| SVC-FPRIME_FRAMER-002 | `Svc::DecafFramer` shall emit one F Prime frame on its `framedOut` output port for each packet received on `dataIn` input port | Unit Test |
-| SVC-FPRIME_FRAMER-003 | `Svc::DecafFramer` shall emit F Prime frames that conforms to the [F´ frame specification](../../FprimeProtocol/docs/sdd.md) | Unit Test |
-| SVC-FPRIME_FRAMER-004 | `Svc::DecafFramer` shall pass through all `Fw.SuccessCondition` received on `comStatusIn` to `comStatusOut` | Unit Test |
+| SVC-DECAF_FRAMER-001 | `Svc::DecafFramer` shall accept data buffers (packets) stored in `Fw::Buffer` through its `dataIn` input port | Unit Test |
+| SVC-DECAF_FRAMER-002 | `Svc::DecafFramer` shall emit one Decaf frame on its `framedOut` output port for each packet received on `dataIn` input port | Unit Test |
+| SVC-DECAF_FRAMER-003 | `Svc::DecafFramer` shall emit Decaf frames that conforms to the [F´ frame specification](../../DECAFProtocol/docs/sdd.md) | Unit Test |
+| SVC-DECAF_FRAMER-004 | `Svc::DecafFramer` shall pass through all `Fw.SuccessCondition` received on `comStatusIn` to `comStatusOut` | Unit Test |
 

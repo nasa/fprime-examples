@@ -6,13 +6,11 @@
 #
 # Note: using PROJECT_NAME as EXECUTABLE_NAME
 ####
-set(SOURCE_FILES
-  "${CMAKE_CURRENT_LIST_DIR}/DecafFrameDetector.cpp"
-)
 
-set(MOD_DEPS
+register_fprime_library(
+  SOURCES
+    "${CMAKE_CURRENT_LIST_DIR}/DecafFrameDetector.cpp"
+  DEPENDS
     Utils_Types
     CustomFraming_Types
 )
-
-register_fprime_module()

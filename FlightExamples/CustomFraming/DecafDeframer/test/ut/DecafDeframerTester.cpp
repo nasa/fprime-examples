@@ -29,7 +29,7 @@ void DecafDeframerTester ::testNominalFrame() {
     // Get random byte of data
     U8 randomByte = static_cast<U8>(STest::Random::lowerUpper(0, 255));
     //           |  F´ start word        |     Length (= 1)      |   Data     |   Checksum (4 bytes)   |
-    U8 data[13] = {0xDE, 0xAD, 0xBE, 0xEF, 0x00, 0x00, 0x00, 0x01,  randomByte,  0x00, 0x00, 0x00, 0x00};
+    U8 data[13] = {0xDE, 0xCA, 0xFB, 0xAD, 0x00, 0x00, 0x00, 0x01,  randomByte,  0x00, 0x00, 0x00, 0x00};
     // Inject the checksum into the data and send it to the component under test
     this->injectChecksum(data, sizeof(data));
     this->mockReceiveData(data, sizeof(data));
@@ -43,7 +43,7 @@ void DecafDeframerTester ::testNominalFrame() {
 
 void DecafDeframerTester ::testIncorrectLengthToken() {
     // Frame:     |  F´ start word       |  INCORRECT Length=5   | Data |   Checksum (4 bytes)   |
-    U8 data[13] = {0xDE, 0xAD, 0xBE, 0xEF, 0x00, 0x00, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00};
+    U8 data[13] = {0xDE, 0xCA, 0xFB, 0xAD, 0x00, 0x00, 0x00, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00};
     // Inject the checksum into the data and send it to the component under test
     this->injectChecksum(data, sizeof(data));
     this->mockReceiveData(data, sizeof(data));
@@ -71,7 +71,7 @@ void DecafDeframerTester ::testIncorrectStartWord() {
 
 void DecafDeframerTester ::testIncorrectCrc() {
     // Frame:     |   F´ start word      |      Length = 1       | Data |  INCORRECT Checksum  |
-    U8 data[13] = {0xDE, 0xAD, 0xBE, 0xEF, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00};
+    U8 data[13] = {0xDE, 0xCA, 0xFB, 0xAD, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00};
     this->mockReceiveData(data, sizeof(data));
     ASSERT_from_dataOut_SIZE(0); // nothing emitted on dataOut
     ASSERT_from_dataReturnOut_SIZE(1); // invalid buffer was deallocated
@@ -82,7 +82,7 @@ void DecafDeframerTester ::testIncorrectCrc() {
 
 void DecafDeframerTester::testTruncatedFrame() {
     // Send a truncated frame, too short to be valid
-    U8 data[11] = {0xDE, 0xAD, 0xBE, 0xEF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+    U8 data[11] = {0xDE, 0xCA, 0xFB, 0xAD, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
     this->mockReceiveData(data, sizeof(data));
     ASSERT_from_dataOut_SIZE(0); // nothing emitted on dataOut
     ASSERT_from_dataReturnOut_SIZE(1); // invalid buffer was deallocated

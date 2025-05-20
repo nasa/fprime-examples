@@ -8,37 +8,37 @@
 #include "STest/Random/Random.hpp"
 
 TEST(DecafDeframer, NominalFrame) {
-    Svc::DecafDeframerTester tester;
+    CustomFraming::DecafDeframerTester tester;
     tester.testNominalFrame();
 }
 
 TEST(DecafDeframer, TruncatedFrame) {
-    Svc::DecafDeframerTester tester;
+    CustomFraming::DecafDeframerTester tester;
     tester.testTruncatedFrame();
 }
 
 TEST(DecafDeframer, ZeroSizeFrame) {
-    Svc::DecafDeframerTester tester;
+    CustomFraming::DecafDeframerTester tester;
     tester.testZeroSizeFrame();
 }
 
 TEST(DecafDeframer, testIncorrectLengthToken) {
-    Svc::DecafDeframerTester tester;
+    CustomFraming::DecafDeframerTester tester;
     tester.testIncorrectLengthToken();
 }
 
 TEST(DecafDeframer, testIncorrectStartWord) {
-    Svc::DecafDeframerTester tester;
+    CustomFraming::DecafDeframerTester tester;
     tester.testIncorrectStartWord();
 }
 
 TEST(DecafDeframer, testIncorrectCrc) {
-    Svc::DecafDeframerTester tester;
+    CustomFraming::DecafDeframerTester tester;
     tester.testIncorrectCrc();
 }
 
 TEST(DecafDeframer, testDataReturn) {
-    Svc::DecafDeframerTester tester;
+    CustomFraming::DecafDeframerTester tester;
     tester.testDataReturn();
 }
 

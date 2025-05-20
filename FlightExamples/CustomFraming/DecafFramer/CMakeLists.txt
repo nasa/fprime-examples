@@ -10,23 +10,22 @@
 #
 ####
 
-set(SOURCE_FILES
-  "${CMAKE_CURRENT_LIST_DIR}/DecafFramer.fpp"
-  "${CMAKE_CURRENT_LIST_DIR}/DecafFramer.cpp"
+register_fprime_library(
+  SOURCES
+    "${CMAKE_CURRENT_LIST_DIR}/DecafFramer.cpp"
+  AUTOCODER_INPUTS
+    "${CMAKE_CURRENT_LIST_DIR}/DecafFramer.fpp"
+  DEPENDS
+    CustomFraming_Types
 )
-
-set(MOD_DEPS
-  CustomFraming_Types
-)
-
-register_fprime_module()
 
 
 ### Unit Tests ###
-set(UT_SOURCE_FILES
-  "${CMAKE_CURRENT_LIST_DIR}/DecafFramer.fpp"
-  "${CMAKE_CURRENT_LIST_DIR}/test/ut/DecafFramerTestMain.cpp"
-  "${CMAKE_CURRENT_LIST_DIR}/test/ut/DecafFramerTester.cpp"
-)
 set(UT_AUTO_HELPERS ON)
-register_fprime_ut()
+register_fprime_ut(
+  SOURCES
+    "${CMAKE_CURRENT_LIST_DIR}/test/ut/DecafFramerTestMain.cpp"
+    "${CMAKE_CURRENT_LIST_DIR}/test/ut/DecafFramerTester.cpp"
+  AUTOCODER_INPUTS
+    "${CMAKE_CURRENT_LIST_DIR}/DecafFramer.fpp"
+)
