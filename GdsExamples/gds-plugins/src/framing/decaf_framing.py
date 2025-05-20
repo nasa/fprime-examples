@@ -67,11 +67,11 @@ class DecafFramerDeframer(FramerDeframer):
             # If the pool is large enough to read the whole frame, then read it
             if len(data) >= total_size:
                 deframed, transmitted_checksum = struct.unpack_from(
-                    f">{data_size}sI", data, FpFramerDeframer.HEADER_SIZE
+                    f">{data_size}sI", data, self.HEADER_SIZE
                 )
                 # If the checksum is valid, return the packet. Otherwise continue to rotate
                 if transmitted_checksum == calculate_checksum(
-                    data[: data_size + FpFramerDeframer.HEADER_SIZE],
+                    data[: data_size + self.HEADER_SIZE],
                     "crc32"
                 ):
                     data = data[total_size:]
