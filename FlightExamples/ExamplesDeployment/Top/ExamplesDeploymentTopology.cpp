@@ -11,7 +11,7 @@
 // Necessary project-specified types
 #include <Fw/Types/MallocAllocator.hpp>
 #include <Svc/FramingProtocol/FprimeProtocol.hpp>
-#include <Svc/FrameAccumulator/FrameDetector/FprimeFrameDetector.hpp>
+#include <CustomFraming/DecafFrameDetector/DecafFrameDetector.hpp>
 
 // Used for 1Hz synthetic cycling
 #include <Os/Mutex.hpp>
@@ -23,8 +23,8 @@ using namespace ExamplesDeployment;
 // initialization phase.
 Fw::MallocAllocator mallocator;
 
-// The reference topology uses the F´ packet protocol when communicating with the ground
-Svc::FrameDetectors::FprimeFrameDetector frameDetector;
+// The reference topology uses the Decaf packet protocol when communicating with the ground
+CustomFraming::DecafFrameDetector frameDetector;
 
 Svc::ComQueue::QueueConfigurationTable configurationTable;
 

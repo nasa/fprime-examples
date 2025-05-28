@@ -15,6 +15,7 @@ set(MOD_DEPS
   # Communication Implementations
   Drv/Udp
   Drv/TcpClient
+  CustomFraming_DecafFrameDetector
 )
 
 register_fprime_module()
