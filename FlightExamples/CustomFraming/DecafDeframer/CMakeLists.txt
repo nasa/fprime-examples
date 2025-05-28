@@ -9,7 +9,6 @@ register_fprime_library(
 )
 
 ### Unit Tests ###
-set(UT_AUTO_HELPERS ON)
 register_fprime_ut(
   SOURCES
     "${CMAKE_CURRENT_LIST_DIR}/test/ut/DecafDeframerTestMain.cpp"
@@ -18,4 +17,5 @@ register_fprime_ut(
     "${CMAKE_CURRENT_LIST_DIR}/DecafDeframer.fpp"
   DEPENDS
     STest
+  UT_AUTO_HELPERS
 )

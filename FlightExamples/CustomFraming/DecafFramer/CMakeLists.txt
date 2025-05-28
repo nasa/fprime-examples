@@ -21,11 +21,11 @@ register_fprime_library(
 
 
 ### Unit Tests ###
-set(UT_AUTO_HELPERS ON)
 register_fprime_ut(
   SOURCES
     "${CMAKE_CURRENT_LIST_DIR}/test/ut/DecafFramerTestMain.cpp"
     "${CMAKE_CURRENT_LIST_DIR}/test/ut/DecafFramerTester.cpp"
   AUTOCODER_INPUTS
     "${CMAKE_CURRENT_LIST_DIR}/DecafFramer.fpp"
+  UT_AUTO_HELPERS
 )
