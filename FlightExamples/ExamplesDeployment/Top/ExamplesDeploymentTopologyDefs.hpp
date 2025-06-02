@@ -6,7 +6,6 @@
 #ifndef EXAMPLESDEPLOYMENT_EXAMPLESDEPLOYMENTTOPOLOGYDEFS_HPP
 #define EXAMPLESDEPLOYMENT_EXAMPLESDEPLOYMENTTOPOLOGYDEFS_HPP
 
-#include "Drv/BlockDriver/BlockDriver.hpp"
 #include "Fw/Types/MallocAllocator.hpp"
 #include "ExamplesDeployment/Top/FppConstantsAc.hpp"
 #include "Svc/FramingProtocol/FprimeProtocol.hpp"

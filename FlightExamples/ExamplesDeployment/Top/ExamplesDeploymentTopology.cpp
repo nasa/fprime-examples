@@ -58,7 +58,6 @@ enum TopologyConstants {
 
 // Ping entries are autocoded, however; this code is not properly exported. Thus, it is copied here.
 Svc::Health::PingEntry pingEntries[] = {
-    {PingEntries::ExamplesDeployment_blockDrv::WARN, PingEntries::ExamplesDeployment_blockDrv::FATAL, "blockDrv"},
     {PingEntries::ExamplesDeployment_tlmSend::WARN, PingEntries::ExamplesDeployment_tlmSend::FATAL, "chanTlm"},
     {PingEntries::ExamplesDeployment_cmdDisp::WARN, PingEntries::ExamplesDeployment_cmdDisp::FATAL, "cmdDisp"},
     {PingEntries::ExamplesDeployment_cmdSeq::WARN, PingEntries::ExamplesDeployment_cmdSeq::FATAL, "cmdSeq"},
@@ -164,25 +163,11 @@ Os::Mutex cycleLock;
 volatile bool cycleFlag = true;
 
 void startSimulatedCycle(Fw::TimeInterval interval) {
-    cycleLock.lock();
-    bool cycling = cycleFlag;
-    cycleLock.unLock();
-
-    // Main loop
-    while (cycling) {
-        ExamplesDeployment::blockDrv.callIsr();
-        Os::Task::delay(interval);
-
-        cycleLock.lock();
-        cycling = cycleFlag;
-        cycleLock.unLock();
-    }
+    linuxTimer.startTimer(interval.getSeconds()*1000+interval.getUSeconds()/1000);
 }
 
 void stopSimulatedCycle() {
-    cycleLock.lock();
-    cycleFlag = false;
-    cycleLock.unLock();
+    linuxTimer.quit();
 }
 
 void teardownTopology(const TopologyState& state) {
