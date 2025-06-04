@@ -26,13 +26,6 @@ jobs:
         with:
           submodules: recursive
 
-      - name: "Overlay nasa/fprime@devel"
-        uses: actions/checkout@v4
-        with:
-          repository: nasa/fprime
-          submodules: true
-          path: ./FlightExamples/lib/fprime
-
       - name: "Set up F Prime environment"
         run: pip3 install --break-system-packages -r ./FlightExamples/lib/fprime/requirements.txt
 
@@ -42,5 +35,6 @@ jobs:
           run_unit_tests: true
           build_location: ./FlightExamples
           fprime_location: ./FlightExamples/lib/fprime
+          fprime_version: devel
           skip_requirements_install: true
           extra_generate_args: "-DFPRIME_EXAMPLES_USE_OPENCV=ON"
