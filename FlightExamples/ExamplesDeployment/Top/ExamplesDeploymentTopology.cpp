@@ -58,7 +58,6 @@ enum TopologyConstants {
 
 // Ping entries are autocoded, however; this code is not properly exported. Thus, it is copied here.
 Svc::Health::PingEntry pingEntries[] = {
-    {PingEntries::ExamplesDeployment_blockDrv::WARN, PingEntries::ExamplesDeployment_blockDrv::FATAL, "blockDrv"},
     {PingEntries::ExamplesDeployment_tlmSend::WARN, PingEntries::ExamplesDeployment_tlmSend::FATAL, "chanTlm"},
     {PingEntries::ExamplesDeployment_cmdDisp::WARN, PingEntries::ExamplesDeployment_cmdDisp::FATAL, "cmdDisp"},
     {PingEntries::ExamplesDeployment_cmdSeq::WARN, PingEntries::ExamplesDeployment_cmdSeq::FATAL, "cmdSeq"},
@@ -155,7 +154,7 @@ void setupTopology(const TopologyState& state) {
     if (state.hostname != nullptr && state.port != 0) {
         Os::TaskString name("ReceiveTask");
         // Uplink is configured for receive so a socket task is started
-        comDriver.start(name, true, COMM_PRIORITY, Default::STACK_SIZE);
+        comDriver.start(name, COMM_PRIORITY, Default::STACK_SIZE);
     }
 }
 
@@ -164,25 +163,11 @@ Os::Mutex cycleLock;
 volatile bool cycleFlag = true;
 
 void startSimulatedCycle(Fw::TimeInterval interval) {
-    cycleLock.lock();
-    bool cycling = cycleFlag;
-    cycleLock.unLock();
-
-    // Main loop
-    while (cycling) {
-        ExamplesDeployment::blockDrv.callIsr();
-        Os::Task::delay(interval);
-
-        cycleLock.lock();
-        cycling = cycleFlag;
-        cycleLock.unLock();
-    }
+    linuxTimer.startTimer(interval.getSeconds()*1000+interval.getUSeconds()/1000);
 }
 
 void stopSimulatedCycle() {
-    cycleLock.lock();
-    cycleFlag = false;
-    cycleLock.unLock();
+    linuxTimer.quit();
 }
 
 void teardownTopology(const TopologyState& state) {
