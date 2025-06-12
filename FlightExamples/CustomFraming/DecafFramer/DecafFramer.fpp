@@ -2,7 +2,7 @@ module CustomFraming {
     @ Framer implementation for the F Prime protocol
     passive component DecafFramer {
 
-        include "../../lib/fprime/Svc/Interfaces/FramerInterface.fppi"
+        import Svc.Framer
 
         # ----------------------------------------------------------------------
         # Allocation of buffers
