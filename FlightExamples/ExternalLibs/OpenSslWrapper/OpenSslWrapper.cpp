@@ -6,6 +6,10 @@
 
 #include "ExternalLibs/OpenSslWrapper/OpenSslWrapper.hpp"
 #include "Fw/Logger/Logger.hpp"
+#include <limits>
+
+static_assert(std::numeric_limits<int>::max() <= std::numeric_limits<FwSizeType>::max(),
+    "FwSizeType defined too small");
 
 namespace ExternalLibs {
 
@@ -83,8 +87,8 @@ FwSizeType OpenSslWrapper::aes_encrypt(U8* buffer,
                                        const U8* iv,
                                        EVP_CIPHER_CTX* ctx,
                                        EVP_CIPHER* cipher) const {
-    PlatformIntType len;
-    PlatformIntType ciphertext_len;
+    int len;
+    int ciphertext_len;
 
     if (EVP_CIPHER_CTX_reset(ctx) != 1) {
         Fw::Logger::log("[WARNING] EVP_CIPHER_CTX_reset failed\n");
@@ -108,7 +112,7 @@ FwSizeType OpenSslWrapper::aes_encrypt(U8* buffer,
     }
     ciphertext_len += len;
 
-    return ciphertext_len;
+    return static_cast<FwSizeType>(ciphertext_len);
 }
 
 FwSizeType OpenSslWrapper::aes_decrypt(U8* buffer,
@@ -117,8 +121,8 @@ FwSizeType OpenSslWrapper::aes_decrypt(U8* buffer,
                                        const U8* iv,
                                        EVP_CIPHER_CTX* ctx,
                                        EVP_CIPHER* cipher) const {
-    PlatformIntType outlen;
-    PlatformIntType plaintext_len;
+    int outlen;
+    int plaintext_len;
 
     if (EVP_CIPHER_CTX_reset(ctx) != 1) {
         Fw::Logger::log("[WARNING] EVP_CIPHER_CTX_reset failed\n");
@@ -142,7 +146,7 @@ FwSizeType OpenSslWrapper::aes_decrypt(U8* buffer,
     }
     plaintext_len += outlen;
 
-    return plaintext_len;
+    return static_cast<FwSizeType>(plaintext_len);
 }
 
 void OpenSslWrapper::registerAesKey(ExternalLibs::AesKeyType key) {
