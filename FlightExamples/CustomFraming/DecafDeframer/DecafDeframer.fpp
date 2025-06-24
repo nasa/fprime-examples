@@ -8,7 +8,7 @@ module CustomFraming {
     # Deframer interface
     # ----------------------------------------------------------------------
 
-    include "../../lib/fprime/Svc/Interfaces/DeframerInterface.fppi"
+    import Svc.Deframer
 
     @ An invalid frame was received (too short to be a frame)
     event InvalidBufferReceived \
