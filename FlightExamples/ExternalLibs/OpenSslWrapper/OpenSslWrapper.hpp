@@ -17,6 +17,9 @@
 namespace ExternalLibs {
 
 class OpenSslWrapper : public OpenSslWrapperComponentBase {
+
+  friend class OpenSslWrapperTester;
+
   public:
     static const U32 AES_KEY_SIZE = 32;
 
@@ -97,7 +100,7 @@ class OpenSslWrapper : public OpenSslWrapperComponentBase {
 
     // Get the AES key in raw bytes (U8*)
     U8* getAesKey();
-  
+
   PRIVATE:
     // AES Key type to transmit over the wire (unsafe without asymetric encryption)
     ExternalLibs::AesKeyType m_aesKey;  // U8[32] (defined in FPP)
