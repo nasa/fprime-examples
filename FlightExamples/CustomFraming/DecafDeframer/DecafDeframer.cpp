@@ -44,13 +44,13 @@ void DecafDeframer ::dataIn_handler(FwIndexType portNum, Fw::Buffer& data, const
     FW_ASSERT(status == Fw::SerializeStatus::FW_SERIALIZE_OK, status);
     // Check that deserialized start_word token matches expected value (default start_word value in the FPP object)
     const CustomFraming::Types::FrameHeader defaultValue;
-    if (header.getstartWord() != defaultValue.getstartWord()) {
+    if (header.get_startWord() != defaultValue.get_startWord()) {
         this->log_WARNING_HI_InvalidStartWord();
         this->dataReturnOut_out(0, data, context); // drop the frame
         return;
     }
     // We expect the frame size to be size of header + body (of size specified in header) + trailer
-    const FwSizeType expectedFrameSize = CustomFraming::Types::FrameHeader::SERIALIZED_SIZE + header.getlengthField() +
+    const FwSizeType expectedFrameSize = CustomFraming::Types::FrameHeader::SERIALIZED_SIZE + header.get_lengthField() +
                                          CustomFraming::Types::FrameTrailer::SERIALIZED_SIZE;
     if (data.getSize() < expectedFrameSize) {
         this->log_WARNING_HI_InvalidLengthReceived();
@@ -60,14 +60,14 @@ void DecafDeframer ::dataIn_handler(FwIndexType portNum, Fw::Buffer& data, const
 
     // ---------------- Validate Frame Trailer ----------------
     // Deserialize transmitted trailer: trailer is at offset = len(header) + len(body)
-    status = deserializer.moveDeserToOffset(CustomFraming::Types::FrameHeader::SERIALIZED_SIZE + header.getlengthField());
+    status = deserializer.moveDeserToOffset(CustomFraming::Types::FrameHeader::SERIALIZED_SIZE + header.get_lengthField());
     FW_ASSERT(status == Fw::SerializeStatus::FW_SERIALIZE_OK, status);
     status = trailer.deserialize(deserializer);
     FW_ASSERT(status == Fw::SerializeStatus::FW_SERIALIZE_OK, status);
     // Compute CRC over the transmitted data (header + body)
     Utils::Hash hash;
     Utils::HashBuffer computedCrc;
-    FwSizeType fieldToHashSize = header.getlengthField() + CustomFraming::Types::FrameHeader::SERIALIZED_SIZE;
+    FwSizeType fieldToHashSize = header.get_lengthField() + CustomFraming::Types::FrameHeader::SERIALIZED_SIZE;
     hash.init();
     // Add byte by byte to the hash
     for (FwSizeType i = 0; i < fieldToHashSize; i++) {
@@ -75,7 +75,7 @@ void DecafDeframer ::dataIn_handler(FwIndexType portNum, Fw::Buffer& data, const
     }
     hash.final(computedCrc);
     // Check that the CRC in the trailer of the frame matches the computed CRC
-    if (trailer.getcrcField() != computedCrc.asBigEndianU32()) {
+    if (trailer.get_crcField() != computedCrc.asBigEndianU32()) {
         this->log_WARNING_HI_InvalidChecksum();
         this->dataReturnOut_out(0, data, context); // drop the frame
         return;
