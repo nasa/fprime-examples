@@ -24,7 +24,7 @@ class Manager : public ManagerComponentBase {
     //! Destroy Manager object
     ~Manager();
 
-  PRIVATE:
+  private:
     // ----------------------------------------------------------------------
     // Handler implementations for typed input ports
     // ----------------------------------------------------------------------
@@ -42,7 +42,7 @@ class Manager : public ManagerComponentBase {
                           const Fw::Completed& completed  //!< Completion status
                           ) override;
 
-  PRIVATE:
+  private:
     // ----------------------------------------------------------------------
     // Handler implementations for commands
     // ----------------------------------------------------------------------

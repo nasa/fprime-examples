@@ -23,7 +23,7 @@ class Worker : public WorkerComponentBase {
     //! Destroy Worker object
     ~Worker();
 
-  PRIVATE:
+  private:
     // ----------------------------------------------------------------------
     // Handler implementations for typed input ports
     // ----------------------------------------------------------------------
