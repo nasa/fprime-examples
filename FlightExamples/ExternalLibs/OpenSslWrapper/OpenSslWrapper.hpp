@@ -34,7 +34,7 @@ class OpenSslWrapper : public OpenSslWrapperComponentBase {
     //! Destroy OpenSslWrapper object
     ~OpenSslWrapper();
 
-  PRIVATE:
+  private:
     // ----------------------------------------------------------------------
     // Handler implementations for user-defined typed input ports
     // ----------------------------------------------------------------------
@@ -55,7 +55,7 @@ class OpenSslWrapper : public OpenSslWrapperComponentBase {
       Fw::Buffer& encrypted_buff  //!< Encrypted buffer to decrypt (decrypted in place with AES)
       ) override;
 
-  PRIVATE:
+  private:
     // ----------------------------------------------------------------------
     // Handler implementations for commands
     // ----------------------------------------------------------------------
@@ -78,7 +78,7 @@ class OpenSslWrapper : public OpenSslWrapperComponentBase {
     // ----------------------------------------------------------------------
     // Helpers
     // ----------------------------------------------------------------------
-  PRIVATE:
+  private:
     // Decrypt buffer in place and return length of decrypted buffer
     FwSizeType aes_decrypt(U8* buffer,
                            FwSizeType buffer_len,
@@ -101,7 +101,7 @@ class OpenSslWrapper : public OpenSslWrapperComponentBase {
     // Get the AES key in raw bytes (U8*)
     U8* getAesKey();
 
-  PRIVATE:
+  private:
     // AES Key type to transmit over the wire (unsafe without asymetric encryption)
     ExternalLibs::AesKeyType m_aesKey;  // U8[32] (defined in FPP)
     // OpenSSL types for AES methods

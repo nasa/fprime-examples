@@ -29,7 +29,7 @@ class ImageProcessor : public ImageProcessorComponentBase {
     //! Destroy ImageProcessor object
     ~ImageProcessor();
 
-  PRIVATE:
+  private:
     //! Handler implementation for readImageAt
     ExternalLibs::ImageReadStatus readImageAt_handler(FwIndexType portNum,               //!< The port number
       U8 index,                          //!< Index to insert the image at in the
@@ -43,7 +43,7 @@ class ImageProcessor : public ImageProcessorComponentBase {
       U32 cmdSeq            //!< The command sequence number
       ) override;
 
-  PRIVATE:
+  private:
     etl::vector<cv::Mat, 10> m_imageVector;  //!< Vector to hold OpenCV images to be processed
 
 };

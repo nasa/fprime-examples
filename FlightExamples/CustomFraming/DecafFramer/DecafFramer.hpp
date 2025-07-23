@@ -24,7 +24,7 @@ class DecafFramer final : public DecafFramerComponentBase {
     //! Destroy DecafFramer object
     ~DecafFramer();
 
-  PRIVATE:
+  private:
     // ----------------------------------------------------------------------
     // Handler implementations for typed input ports
     // ----------------------------------------------------------------------
