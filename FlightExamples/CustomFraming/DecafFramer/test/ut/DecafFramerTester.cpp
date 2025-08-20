@@ -40,18 +40,17 @@ void DecafFramerTester ::testComStatusPassThrough() {
     Fw::Success inputStatus = Fw::Success::SUCCESS;
     this->invoke_to_comStatusIn(0, inputStatus);
     ASSERT_from_comStatusOut_SIZE(1);
-    ASSERT_from_comStatusOut(0, inputStatus); // at index 0, received SUCCESS
+    ASSERT_from_comStatusOut(0, inputStatus);  // at index 0, received SUCCESS
     inputStatus = Fw::Success::FAILURE;
     this->invoke_to_comStatusIn(0, inputStatus);
     ASSERT_from_comStatusOut_SIZE(2);
-    ASSERT_from_comStatusOut(1, inputStatus); // at index 1, received FAILURE
+    ASSERT_from_comStatusOut(1, inputStatus);  // at index 1, received FAILURE
 }
 
 void DecafFramerTester ::testNominalFraming() {
     U8 bufferData[100];
     Fw::Buffer buffer(bufferData, sizeof(bufferData));
     ComCfg::FrameContext context;
-
 
     // Fill the buffer with some data
     for (U32 i = 0; i < sizeof(bufferData); ++i) {
@@ -60,16 +59,17 @@ void DecafFramerTester ::testNominalFraming() {
 
     // Send the buffer to the component
     this->invoke_to_dataIn(0, buffer, context);
-    ASSERT_from_dataOut_SIZE(1); // One frame emitted
-    ASSERT_from_dataReturnOut_SIZE(1); // Original data buffer ownership returned
+    ASSERT_from_dataOut_SIZE(1);        // One frame emitted
+    ASSERT_from_dataReturnOut_SIZE(1);  // Original data buffer ownership returned
 
     Fw::Buffer outputBuffer = this->fromPortHistory_dataOut->at(0).data;
     // Check the size of the output buffer
-    ASSERT_EQ(outputBuffer.getSize(), sizeof(bufferData) + Types::FrameHeader::SERIALIZED_SIZE + Types::FrameTrailer::SERIALIZED_SIZE);
+    ASSERT_EQ(outputBuffer.getSize(),
+              sizeof(bufferData) + Types::FrameHeader::SERIALIZED_SIZE + Types::FrameTrailer::SERIALIZED_SIZE);
     // Check header
     Types::FrameHeader defaultHeader;
     Types::FrameHeader outputHeader;
-    outputBuffer.getDeserializer().deserialize(outputHeader);
+    outputBuffer.getDeserializer().deserializeTo(outputHeader);
     ASSERT_EQ(outputHeader.get_startWord(), defaultHeader.get_startWord());
     ASSERT_EQ(outputHeader.get_lengthField(), sizeof(bufferData));
     // Check data
@@ -82,7 +82,7 @@ void DecafFramerTester ::testNominalFraming() {
 // Test Harness: Handler implementations for output ports
 // ----------------------------------------------------------------------
 
-Fw::Buffer DecafFramerTester::from_bufferAllocate_handler(FwIndexType portNum, FwSizeType size){
+Fw::Buffer DecafFramerTester::from_bufferAllocate_handler(FwIndexType portNum, FwSizeType size) {
     this->pushFromPortEntry_bufferAllocate(size);
     this->m_buffer.setData(this->m_buffer_slot);
     this->m_buffer.setSize(size);

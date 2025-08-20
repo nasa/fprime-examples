@@ -28,9 +28,10 @@ void DecafFramer ::dataIn_handler(FwIndexType portNum, Fw::Buffer& data, const C
     CustomFraming::Types::FrameTrailer trailer;
 
     // Full size of the frame will be size of header + data + trailer
-    FwSizeType frameSize =
-        CustomFraming::Types::FrameHeader::SERIALIZED_SIZE + data.getSize() + CustomFraming::Types::FrameTrailer::SERIALIZED_SIZE;
-    FW_ASSERT(data.getSize() <= std::numeric_limits<CustomFraming::Types::TokenType>::max(), static_cast<FwAssertArgType>(frameSize));
+    FwSizeType frameSize = CustomFraming::Types::FrameHeader::SERIALIZED_SIZE + data.getSize() +
+                           CustomFraming::Types::FrameTrailer::SERIALIZED_SIZE;
+    FW_ASSERT(data.getSize() <= std::numeric_limits<CustomFraming::Types::TokenType>::max(),
+              static_cast<FwAssertArgType>(frameSize));
     FW_ASSERT(frameSize <= std::numeric_limits<Fw::Buffer::SizeType>::max(), static_cast<FwAssertArgType>(frameSize));
 
     // Allocate frame buffer
@@ -41,18 +42,18 @@ void DecafFramer ::dataIn_handler(FwIndexType portNum, Fw::Buffer& data, const C
     // Serialize the header
     // 0xDECAF000 is already set as the default value for the header startWord field in the FPP type definition
     header.set_lengthField(data.getSize());
-    status = frameSerializer.serialize(header);
+    status = frameSerializer.serializeFrom(header);
     FW_ASSERT(status == Fw::FW_SERIALIZE_OK, status);
 
     // Serialize the data
-    status = frameSerializer.serialize(data.getData(), data.getSize(), Fw::Serialization::OMIT_LENGTH);
+    status = frameSerializer.serializeFrom(data.getData(), data.getSize(), Fw::Serialization::OMIT_LENGTH);
     FW_ASSERT(status == Fw::FW_SERIALIZE_OK, status);
 
     // Serialize the trailer (with CRC computation)
     Utils::HashBuffer hashBuffer;
     Utils::Hash::hash(frameBuffer.getData(), frameSize - HASH_DIGEST_LENGTH, hashBuffer);
     trailer.set_crcField(hashBuffer.asBigEndianU32());
-    status = frameSerializer.serialize(trailer);
+    status = frameSerializer.serializeFrom(trailer);
     FW_ASSERT(status == Fw::FW_SERIALIZE_OK, status);
 
     // Send the full frame out - this port shall always be connected
@@ -67,7 +68,9 @@ void DecafFramer ::comStatusIn_handler(FwIndexType portNum, Fw::Success& conditi
     }
 }
 
-void DecafFramer ::dataReturnIn_handler(FwIndexType portNum, Fw::Buffer& frameBuffer, const ComCfg::FrameContext& context) {
+void DecafFramer ::dataReturnIn_handler(FwIndexType portNum,
+                                        Fw::Buffer& frameBuffer,
+                                        const ComCfg::FrameContext& context) {
     // dataReturnIn is the allocated buffer coming back from the ComManager (e.g. ComStub) component
     this->bufferDeallocate_out(0, frameBuffer);
 }
