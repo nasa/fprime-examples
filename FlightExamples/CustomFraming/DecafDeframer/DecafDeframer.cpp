@@ -41,7 +41,7 @@ void DecafDeframer ::dataIn_handler(FwIndexType portNum, Fw::Buffer& data, const
     // ---------------- Validate Frame Header ----------------
     // Deserialize transmitted header into the header object
     auto deserializer = data.getDeserializer();
-    Fw::SerializeStatus status = header.deserialize(deserializer);
+    Fw::SerializeStatus status = header.deserializeFrom(deserializer);
     FW_ASSERT(status == Fw::SerializeStatus::FW_SERIALIZE_OK, status);
     // Check that deserialized start_word token matches expected value (default start_word value in the FPP object)
     const CustomFraming::Types::FrameHeader defaultValue;
@@ -63,7 +63,7 @@ void DecafDeframer ::dataIn_handler(FwIndexType portNum, Fw::Buffer& data, const
     // If PacketDescriptor translates to an invalid APID, let it default to FW_PACKET_UNKNOWN
     // and let downstream components (e.g. custom router) handle it
     FwPacketDescriptorType packetDescriptor;
-    status = deserializer.deserialize(packetDescriptor);
+    status = deserializer.deserializeTo(packetDescriptor);
     FW_ASSERT(status == Fw::SerializeStatus::FW_SERIALIZE_OK, status);
     ComCfg::FrameContext contextCopy = context;
     // If a valid descriptor is deserialized, set it in the context
@@ -76,7 +76,7 @@ void DecafDeframer ::dataIn_handler(FwIndexType portNum, Fw::Buffer& data, const
     status =
         deserializer.moveDeserToOffset(CustomFraming::Types::FrameHeader::SERIALIZED_SIZE + header.get_lengthField());
     FW_ASSERT(status == Fw::SerializeStatus::FW_SERIALIZE_OK, status);
-    status = trailer.deserialize(deserializer);
+    status = trailer.deserializeFrom(deserializer);
     FW_ASSERT(status == Fw::SerializeStatus::FW_SERIALIZE_OK, status);
     // Compute CRC over the transmitted data (header + body)
     Utils::Hash hash;

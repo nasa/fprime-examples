@@ -14,7 +14,8 @@ Svc::FrameDetector::Status DecafFrameDetector::detect(const ::Types::CircularBuf
     // If not enough data for header + trailer, report MORE_DATA_NEEDED
     if (data.get_allocated_size() <
         CustomFraming::Types::FrameHeader::SERIALIZED_SIZE + CustomFraming::Types::FrameTrailer::SERIALIZED_SIZE) {
-        size_out = CustomFraming::Types::FrameHeader::SERIALIZED_SIZE + CustomFraming::Types::FrameTrailer::SERIALIZED_SIZE;
+        size_out =
+            CustomFraming::Types::FrameHeader::SERIALIZED_SIZE + CustomFraming::Types::FrameTrailer::SERIALIZED_SIZE;
         return Svc::FrameDetector::MORE_DATA_NEEDED;
     }
 
@@ -32,7 +33,7 @@ Svc::FrameDetector::Status DecafFrameDetector::detect(const ::Types::CircularBuf
     status = header_ser_buffer.setBuffLen(CustomFraming::Types::FrameHeader::SERIALIZED_SIZE);
     FW_ASSERT(status == Fw::FW_SERIALIZE_OK, static_cast<FwAssertArgType>(status));
     // Attempt to deserialize data into the FrameHeader object
-    status = header.deserialize(header_ser_buffer);
+    status = header.deserializeFrom(header_ser_buffer);
     if (status != Fw::FW_SERIALIZE_OK) {
         return Svc::FrameDetector::NO_FRAME_DETECTED;
     }
@@ -42,7 +43,8 @@ Svc::FrameDetector::Status DecafFrameDetector::detect(const ::Types::CircularBuf
         return Svc::FrameDetector::NO_FRAME_DETECTED;
     }
     // We expect the frame size to be size of header + body (of size specified in header) + trailer
-    const FwSizeType expected_frame_size = CustomFraming::Types::FrameHeader::SERIALIZED_SIZE + header.get_lengthField() +
+    const FwSizeType expected_frame_size = CustomFraming::Types::FrameHeader::SERIALIZED_SIZE +
+                                           header.get_lengthField() +
                                            CustomFraming::Types::FrameTrailer::SERIALIZED_SIZE;
     // If the current allocated size can't hold the expected_frame_size -> MORE_DATA_NEEDED
     if (data.get_allocated_size() < expected_frame_size) {
@@ -61,7 +63,7 @@ Svc::FrameDetector::Status DecafFrameDetector::detect(const ::Types::CircularBuf
     status = trailer_ser_buffer.setBuffLen(CustomFraming::Types::FrameTrailer::SERIALIZED_SIZE);
     FW_ASSERT(status == Fw::FW_SERIALIZE_OK, static_cast<FwAssertArgType>(status));
     // Deserialize trailer from circular buffer (peeked data) into trailer object
-    status = trailer.deserialize(trailer_ser_buffer);
+    status = trailer.deserializeFrom(trailer_ser_buffer);
     if (status != Fw::FW_SERIALIZE_OK) {
         return Svc::FrameDetector::NO_FRAME_DETECTED;
     }
