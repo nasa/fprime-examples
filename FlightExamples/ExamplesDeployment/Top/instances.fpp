@@ -122,4 +122,6 @@ module ExamplesDeployment {
 
   instance linuxTimer: Svc.LinuxTimer base id 0x4E00
 
+  instance sine: ExamplesDeployment.Sine base id 0x4F00
+
 }

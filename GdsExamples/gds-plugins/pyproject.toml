@@ -41,6 +41,7 @@ Repository = "https://github.com/fprime-community/fprime-gds"
 
 [project.entry-points.fprime_gds]
 decaf_framing = "framing.decaf_framing:DecafFramerDeframer"
+cosine_deriver = "ground_channels.cosine:CosineDeriver"
 
 ####
 # setuptools_scm dynamically generates version number from git, as well as automatically

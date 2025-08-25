@@ -1,0 +1,3 @@
+command-line-options:
+  framing-selection: decaf
+  no-zmq:

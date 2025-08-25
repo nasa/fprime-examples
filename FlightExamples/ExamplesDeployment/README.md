@@ -25,6 +25,21 @@ cd ExamplesDeployment
 fprime-gds
 ```
 
+## Running the application with Ground-Calculated Channels
+
+In order to run the example application with ground-calculated channels, the user must generate the combined dictionary and run the GDS with it.
+
+```
+cd ExamplesDeployment
+fprime-merge-dictionary --permissive --output MergedDictionary.json \
+    ../build-artifacts/Darwin/ExamplesDeployment/dict/ExamplesDeploymentTopologyDictionary.json \
+    ./GroundChannels/GroundDefinedChannelsDictionary.json
+fprime-gds --dictionary ./MergedDictionary.json
+```
+
+> [!NOTE]
+> Ground-calculated channels only works with the `--no-zmq` option.
+
 ## Running the example Tests
 
 Start the GDS as shown above, then run:

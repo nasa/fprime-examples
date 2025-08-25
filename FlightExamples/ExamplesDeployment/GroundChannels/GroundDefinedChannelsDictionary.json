@@ -1,0 +1,30 @@
+{
+  "metadata" : {
+    "deploymentName" : "GroundChannels",
+    "projectVersion" : "v4.0.0",
+    "frameworkVersion" : "v4.0.0",
+    "libraryVersions" : [],
+    "dictionarySpecVersion" : "1.0.0"
+  },
+  "typeDefinitions" : [],
+  "constants" : [],
+  "commands" : [],
+  "parameters" : [],
+  "events" : [],
+  "telemetryChannels" : [
+    {
+      "name" : "ExamplesDeployment(Ground).cosine.Y",
+      "type" : {
+        "name" : "F64",
+        "kind" : "float",
+        "size" : 64
+      },
+      "id" : 1000020224,
+      "telemetryUpdate" : "always",
+      "annotation" : "Output (derived) of cosine(system time)"
+    }
+  ],
+  "records" : [],
+  "containers" : [],
+  "telemetryPacketSets" : []
+}

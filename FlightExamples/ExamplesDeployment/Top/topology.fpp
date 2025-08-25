@@ -48,6 +48,7 @@ module ExamplesDeployment {
     instance textLogger
     instance systemResources
     instance linuxTimer
+    instance sine
 
     # ----------------------------------------------------------------------
     # Pattern graph specifiers
@@ -108,13 +109,14 @@ module ExamplesDeployment {
 
       # Rate group 1
       rateGroupDriver.CycleOut[Ports_RateGroups.rateGroup1] -> rateGroup1.CycleIn
-      rateGroup1.RateGroupMemberOut[0] -> tlmSend.Run
-      rateGroup1.RateGroupMemberOut[1] -> fileDownlink.Run
-      rateGroup1.RateGroupMemberOut[2] -> systemResources.run
+      rateGroup1.RateGroupMemberOut[0] -> cmdSeq.schedIn
+      rateGroup1.RateGroupMemberOut[1] -> sine.run
+      rateGroup1.RateGroupMemberOut[2] -> tlmSend.Run
 
       # Rate group 2
       rateGroupDriver.CycleOut[Ports_RateGroups.rateGroup2] -> rateGroup2.CycleIn
-      rateGroup2.RateGroupMemberOut[0] -> cmdSeq.schedIn
+      rateGroup2.RateGroupMemberOut[0] -> fileDownlink.Run
+      rateGroup2.RateGroupMemberOut[1] -> systemResources.run
 
       # Rate group 3
       rateGroupDriver.CycleOut[Ports_RateGroups.rateGroup3] -> rateGroup3.CycleIn

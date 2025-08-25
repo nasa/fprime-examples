@@ -1,0 +1,2 @@
+-r ./lib/fprime/requirements.txt
+../GdsExamples/gds-plugins
