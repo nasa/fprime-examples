@@ -6,15 +6,9 @@
 # endif ()
 
 
-add_fprime_subdirectory("${CMAKE_CURRENT_LIST_DIR}/ExternalLibsConfig")
-
-register_fprime_module(
+register_fprime_config(
     EXCLUDE_FROM_ALL
     AUTOCODER_INPUTS
-        "${CMAKE_CURRENT_LIST_DIR}/ExternalLibsSubtopology-empty.fpp"
-    HEADERS
-        "${CMAKE_CURRENT_LIST_DIR}/ExternalLibsTopologyDefs.hpp"
+        "${CMAKE_CURRENT_LIST_DIR}/ExternalLibsConfig.fpp"
     INTERFACE
-    DEPENDS
-        ExternalLibs_Subtopology_ExternalLibsConfig
 )
