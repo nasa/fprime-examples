@@ -1,9 +1,9 @@
-# set(SOURCE_FILES)
-# if (FPRIME_EXAMPLES_USE_OPENCV)
-#     set(SOURCE_FILES "${CMAKE_CURRENT_LIST_DIR}/ExternalLibsSubtopology-withOpenCV.fpp")
-# else()
-#     set(SOURCE_FILES "${CMAKE_CURRENT_LIST_DIR}/ExternalLibsSubtopology-noOpenCV.fpp")
-# endif ()
+set(SUBTOPOLOGY_FILE)
+if (FPRIME_EXAMPLES_USE_OPENCV)
+    set(SUBTOPOLOGY_FILE "${CMAKE_CURRENT_LIST_DIR}/ExternalLibsSubtopology.fpp")
+else()
+    set(SUBTOPOLOGY_FILE "${CMAKE_CURRENT_LIST_DIR}/ExternalLibsSubtopology-empty.fpp")
+endif ()
 
 
 add_fprime_subdirectory("${CMAKE_CURRENT_LIST_DIR}/ExternalLibsConfig")
@@ -11,7 +11,7 @@ add_fprime_subdirectory("${CMAKE_CURRENT_LIST_DIR}/ExternalLibsConfig")
 register_fprime_module(
     EXCLUDE_FROM_ALL
     AUTOCODER_INPUTS
-        "${CMAKE_CURRENT_LIST_DIR}/ExternalLibsSubtopology-empty.fpp"
+        "${SUBTOPOLOGY_FILE}"
     HEADERS
         "${CMAKE_CURRENT_LIST_DIR}/ExternalLibsTopologyDefs.hpp"
     INTERFACE
