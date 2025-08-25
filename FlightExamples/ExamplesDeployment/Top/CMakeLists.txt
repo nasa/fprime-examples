@@ -19,4 +19,5 @@ register_fprime_module(
     DEPENDS
         Fw_Logger
         ExampleCdhCoreConfig
+        CustomFraming_DecafFrameDetector
 )

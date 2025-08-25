@@ -9,6 +9,7 @@
 #include <ExamplesDeployment/Top/ExamplesDeployment_ExamplesDeploymentPacketsTlmPacketsAc.hpp>
 
 // Necessary project-specified types
+#include <CustomFraming/DecafFrameDetector/DecafFrameDetector.hpp>
 #include <Fw/Types/MallocAllocator.hpp>
 
 // Allows easy reference to objects in FPP/autocoder required namespaces
@@ -27,7 +28,7 @@ U32 rateGroup2Context[Svc::ActiveRateGroup::CONNECTION_COUNT_MAX] = {};
 U32 rateGroup3Context[Svc::ActiveRateGroup::CONNECTION_COUNT_MAX] = {};
 
 Svc::ComQueue::QueueConfigurationTable configurationTable;
-Svc::FrameDetectors::FprimeFrameDetector frameDetector;
+CustomFraming::DecafFrameDetector frameDetector;
 Svc::BufferManager::BufferBins bufferManagerBins;
 
 enum TopologyConstants {
