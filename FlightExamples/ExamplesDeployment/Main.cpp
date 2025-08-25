@@ -12,6 +12,7 @@
 // Used for command line argument processing
 #include <getopt.h>
 // Used for printf functions
+#include <cstdio>
 #include <cstdlib>
 
 /**
@@ -34,7 +35,7 @@ void print_usage(const char* app) {
  * @param signum
  */
 static void signalHandler(int signum) {
-    ExamplesDeployment::stopSimulatedCycle();
+    ExamplesDeployment::stopRateGroups();
 }
 
 /**
@@ -51,6 +52,7 @@ int main(int argc, char* argv[]) {
     I32 option = 0;
     CHAR* hostname = nullptr;
     U16 port_number = 0;
+
     Os::init();
 
     // Loop while reading the getopt supplied options
@@ -74,7 +76,7 @@ int main(int argc, char* argv[]) {
                 return (option == 'h') ? 0 : 1;
         }
     }
-    // Object for communicating state to the reference topology
+    // Object for communicating state to the topology
     ExamplesDeployment::TopologyState inputs;
     inputs.hostname = hostname;
     inputs.port = port_number;
@@ -86,7 +88,7 @@ int main(int argc, char* argv[]) {
 
     // Setup, cycle, and teardown topology
     ExamplesDeployment::setupTopology(inputs);
-    ExamplesDeployment::startSimulatedCycle(Fw::TimeInterval(1,0));  // Program loop cycling rate groups at 1Hz
+    ExamplesDeployment::startRateGroups(Fw::TimeInterval(1, 0));  // Program loop cycling rate groups at 1Hz
     ExamplesDeployment::teardownTopology(inputs);
     (void)printf("Exiting...\n");
     return 0;

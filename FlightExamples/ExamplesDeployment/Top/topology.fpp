@@ -10,107 +10,144 @@ module ExamplesDeployment {
     rateGroup3
   }
 
+  enum Ports_ComPacketQueue {
+      EVENTS,
+      TELEMETRY,
+  };
+
+  enum Ports_ComBufferQueue {
+      FILE
+  };
+
   topology ExamplesDeployment {
-    # ----------------------------------------------------------------------
-    # Subtopology imports
-    # ----------------------------------------------------------------------
+
+  # ----------------------------------------------------------------------
+  # Subtopology imports
+  # ----------------------------------------------------------------------
+    import CdhCore.Subtopology
+    # import DataProducts.Subtopology
+    import FileHandling.Subtopology
+
+    # Project-defined
     import ManagerWorker.Subtopology
     import ExternalLibs.Subtopology
 
-    # ----------------------------------------------------------------------
-    # Instances used in the topology
-    # ----------------------------------------------------------------------
-
-    instance $health
-    instance tlmSend
-    instance cmdDisp
-    instance cmdSeq
-    instance comDriver
-    instance comQueue
-    instance comStub
-    instance deframer
-    instance fprimeRouter
-    instance frameAccumulator
-    instance eventLogger
-    instance fatalAdapter
-    instance fatalHandler
-    instance fileDownlink
-    instance fileManager
-    instance fileUplink
-    instance bufferManager
-    instance framer
+  # ----------------------------------------------------------------------
+  # Instances used in the topology
+  # ----------------------------------------------------------------------
     instance chronoTime
-    instance prmDb
     instance rateGroup1
     instance rateGroup2
     instance rateGroup3
     instance rateGroupDriver
-    instance textLogger
     instance systemResources
-    instance linuxTimer
+    instance timer
+    instance comDriver
+    instance cmdSeq
+    instance comQueue
+    instance commsBufferManager
+    instance frameAccumulator
+    instance deframer
+    instance framer
+    instance fprimeRouter
+    instance comStub
 
-    # ----------------------------------------------------------------------
-    # Pattern graph specifiers
-    # ----------------------------------------------------------------------
+  # ----------------------------------------------------------------------
+  # Pattern graph specifiers
+  # ----------------------------------------------------------------------
 
-    command connections instance cmdDisp
-
-    event connections instance eventLogger
-
-    param connections instance prmDb
-
-    telemetry connections instance tlmSend
-
-    text event connections instance textLogger
-
+    command connections instance CdhCore.cmdDisp
+    event connections instance CdhCore.events
+    telemetry connections instance CdhCore.tlmSend
+    text event connections instance CdhCore.textLogger
+    health connections instance CdhCore.$health
+    param connections instance FileHandling.prmDb
     time connections instance chronoTime
 
-    health connections instance $health
+  # ----------------------------------------------------------------------
+  # Telemetry packets (only used when TlmPacketizer is used)
+  # ----------------------------------------------------------------------
 
-    # ----------------------------------------------------------------------
-    # Direct graph specifiers
-    # ----------------------------------------------------------------------
+    include "ExamplesDeploymentPackets.fppi"
 
+  # ----------------------------------------------------------------------
+  # Direct graph specifiers
+  # ----------------------------------------------------------------------
 
     connections Downlink {
-      # Inputs to ComQueue (events, telemetry, file)
-      eventLogger.PktSend         -> comQueue.comPacketQueueIn[0]
-      tlmSend.PktSend             -> comQueue.comPacketQueueIn[1]
-      fileDownlink.bufferSendOut  -> comQueue.bufferQueueIn[0]
-      comQueue.bufferReturnOut[0] -> fileDownlink.bufferReturn
+        # Inputs to ComQueue (events, telemetry, file)
+        CdhCore.events.PktSend -> comQueue.comPacketQueueIn[Ports_ComPacketQueue.EVENTS]
+        CdhCore.tlmSend.PktSend -> comQueue.comPacketQueueIn[Ports_ComPacketQueue.TELEMETRY]
+        FileHandling.fileDownlink.bufferSendOut -> comQueue.bufferQueueIn[Ports_ComBufferQueue.FILE]
+        comQueue.bufferReturnOut[Ports_ComBufferQueue.FILE] -> FileHandling.fileDownlink.bufferReturn
+        # ComQueue <-> Framer
+        comQueue.dataOut           -> framer.dataIn
+        framer.dataReturnOut -> comQueue.dataReturnIn
+        # Buffer Management for Framer
+        framer.bufferAllocate   -> commsBufferManager.bufferGetCallee
+        framer.bufferDeallocate -> commsBufferManager.bufferSendIn
+        # Framer <-> ComStub
+        framer.dataOut  -> comStub.dataIn
+        comStub.dataReturnOut -> framer.dataReturnIn
+        # ComStatus
+        comStub.comStatusOut       -> framer.comStatusIn
+        framer.comStatusOut  -> comQueue.comStatusIn
+    }
 
-      # ComQueue <-> Framer
-      comQueue.dataOut   -> framer.dataIn
-      framer.dataReturnOut -> comQueue.dataReturnIn
-      framer.comStatusOut  -> comQueue.comStatusIn
+    connections Uplink {
+        # ComStub <-> FrameAccumulator
+        comStub.dataOut                -> frameAccumulator.dataIn
+        frameAccumulator.dataReturnOut -> comStub.dataReturnIn
+        # FrameAccumulator buffer allocations
+        frameAccumulator.bufferDeallocate -> commsBufferManager.bufferSendIn
+        frameAccumulator.bufferAllocate   -> commsBufferManager.bufferGetCallee
+        # FrameAccumulator <-> Deframer
+        frameAccumulator.dataOut -> deframer.dataIn
+        deframer.dataReturnOut   -> frameAccumulator.dataReturnIn
+        # Deframer <-> Router
+        deframer.dataOut           -> fprimeRouter.dataIn
+        fprimeRouter.dataReturnOut -> deframer.dataReturnIn
+        # Router buffer allocations
+        fprimeRouter.bufferAllocate   -> commsBufferManager.bufferGetCallee
+        fprimeRouter.bufferDeallocate -> commsBufferManager.bufferSendIn
+        # Router <-> Command Dispatcher
+        fprimeRouter.commandOut -> CdhCore.cmdDisp.seqCmdBuff
+        CdhCore.cmdDisp.seqCmdStatus -> fprimeRouter.cmdResponseIn
+        # Router <-> File Uplink
+        fprimeRouter.fileOut -> FileHandling.fileUplink.bufferSendIn
+        FileHandling.fileUplink.bufferSendOut -> fprimeRouter.fileBufferReturnIn
+    }
 
-      # Buffer Management for Framer
-      framer.bufferAllocate   -> bufferManager.bufferGetCallee
-      framer.bufferDeallocate -> bufferManager.bufferSendIn
-
-      # Framer <-> ComStub
-      framer.dataOut        -> comStub.dataIn
-      comStub.dataReturnOut -> framer.dataReturnIn
-      comStub.comStatusOut  -> framer.comStatusIn
-
-      # ComStub <-> ComDriver
+    connections Communications {
+      # ComDriver buffer allocations
+      comDriver.allocate      -> commsBufferManager.bufferGetCallee
+      comDriver.deallocate    -> commsBufferManager.bufferSendIn
+      
+      # ComDriver <-> ComStub (Uplink)
+      comDriver.$recv                     -> comStub.drvReceiveIn
+      comStub.drvReceiveReturnOut -> comDriver.recvReturnIn
+      
+      # ComStub <-> ComDriver (Downlink)
       comStub.drvSendOut      -> comDriver.$send
       comDriver.ready         -> comStub.drvConnected
     }
 
-    connections FaultProtection {
-      eventLogger.FatalAnnounce -> fatalHandler.FatalReceive
-    }
+    # connections FileHandling_DataProducts {
+    #   # Data Products to File Downlink
+    #   DataProducts.dpCat.fileOut -> FileHandling.fileDownlink.SendFile
+    #   FileHandling.fileDownlink.FileComplete -> DataProducts.dpCat.fileDone
+    # }
 
     connections RateGroups {
-      # Block driver
-      linuxTimer.CycleOut -> rateGroupDriver.CycleIn
+      # timer to drive rate group
+      timer.CycleOut -> rateGroupDriver.CycleIn
 
       # Rate group 1
       rateGroupDriver.CycleOut[Ports_RateGroups.rateGroup1] -> rateGroup1.CycleIn
-      rateGroup1.RateGroupMemberOut[0] -> tlmSend.Run
-      rateGroup1.RateGroupMemberOut[1] -> fileDownlink.Run
+      rateGroup1.RateGroupMemberOut[0] -> CdhCore.tlmSend.Run
+      rateGroup1.RateGroupMemberOut[1] -> FileHandling.fileDownlink.Run
       rateGroup1.RateGroupMemberOut[2] -> systemResources.run
+      rateGroup1.RateGroupMemberOut[3] -> comQueue.run
 
       # Rate group 2
       rateGroupDriver.CycleOut[Ports_RateGroups.rateGroup2] -> rateGroup2.CycleIn
@@ -118,46 +155,21 @@ module ExamplesDeployment {
 
       # Rate group 3
       rateGroupDriver.CycleOut[Ports_RateGroups.rateGroup3] -> rateGroup3.CycleIn
-      rateGroup3.RateGroupMemberOut[0] -> $health.Run
-      rateGroup3.RateGroupMemberOut[1] -> bufferManager.schedIn
+      rateGroup3.RateGroupMemberOut[0] -> CdhCore.$health.Run
+      rateGroup3.RateGroupMemberOut[1] -> commsBufferManager.schedIn
+      # rateGroup3.RateGroupMemberOut[2] -> DataProducts.dpBufferManager.schedIn
+      # rateGroup3.RateGroupMemberOut[3] -> DataProducts.dpWriter.schedIn
+      # rateGroup3.RateGroupMemberOut[4] -> DataProducts.dpMgr.schedIn
     }
 
-    connections Sequencer {
-      cmdSeq.comCmdOut -> cmdDisp.seqCmdBuff
-      cmdDisp.seqCmdStatus -> cmdSeq.cmdResponseIn
-    }
-
-    connections Uplink {
-      # ComDriver buffer allocations
-      comDriver.allocate      -> bufferManager.bufferGetCallee
-      comDriver.deallocate    -> bufferManager.bufferSendIn
-      # ComDriver <-> ComStub
-      comDriver.$recv             -> comStub.drvReceiveIn
-      comStub.drvReceiveReturnOut -> comDriver.recvReturnIn
-      # ComStub <-> FrameAccumulator
-      comStub.dataOut                -> frameAccumulator.dataIn
-      frameAccumulator.dataReturnOut -> comStub.dataReturnIn
-      # FrameAccumulator buffer allocations
-      frameAccumulator.bufferDeallocate -> bufferManager.bufferSendIn
-      frameAccumulator.bufferAllocate   -> bufferManager.bufferGetCallee
-      # FrameAccumulator <-> Deframer
-      frameAccumulator.dataOut  -> deframer.dataIn
-      deframer.dataReturnOut    -> frameAccumulator.dataReturnIn
-      # Deframer <-> Router
-      deframer.dataOut           -> fprimeRouter.dataIn
-      fprimeRouter.dataReturnOut -> deframer.dataReturnIn
-      # Router buffer allocations
-      fprimeRouter.bufferAllocate   -> bufferManager.bufferGetCallee
-      fprimeRouter.bufferDeallocate -> bufferManager.bufferSendIn
-      # Router <-> CmdDispatcher/FileUplink
-      fprimeRouter.commandOut  -> cmdDisp.seqCmdBuff
-      cmdDisp.seqCmdStatus     -> fprimeRouter.cmdResponseIn
-      fprimeRouter.fileOut     -> fileUplink.bufferSendIn
-      fileUplink.bufferSendOut -> fprimeRouter.fileBufferReturnIn
+    connections CdhCore_cmdSeq {
+      # Command Sequencer
+      cmdSeq.comCmdOut -> CdhCore.cmdDisp.seqCmdBuff
+      CdhCore.cmdDisp.seqCmdStatus -> cmdSeq.cmdResponseIn
     }
 
     connections ExamplesDeployment {
-      # Add here connections to user-defined components
+
     }
 
   }

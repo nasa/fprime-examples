@@ -2,21 +2,16 @@
 #define MANAGERWORKERSUBTOPOLOGY_DEFS_HPP
 
 namespace ManagerWorker {
-    struct ManagerWorkerState {
-        /* include any variables that are needed for 
-        configuring/starting/tearing down the topology */
-    };
-}
+struct ManagerWorkerState {
+    /* include any variables that are needed for
+    configuring/starting/tearing down the topology */
+};
+}  // namespace ManagerWorker
 
-namespace GlobalDefs {
-    namespace PingEntries {
-        namespace ManagerWorker_manager {
-            enum {
-                WARN = 3,
-                FATAL = 5
-            };
-        }
-    }
+namespace PingEntries {
+namespace ManagerWorker_manager {
+enum { WARN = 3, FATAL = 5 };
 }
+}  // namespace PingEntries
 
 #endif
