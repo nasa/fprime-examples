@@ -37,4 +37,4 @@ class CosineDeriver(DataHandlerPlugin):
             return
         cosine_value = math.cos(math.asin(data.get_val_obj().val))
         # Publish the new value under its name, while reusing the time object
-        self.publisher.publishChannel("ExamplesDeployment(Ground).cosine.Y", cosine_value, data.time)
+        self.publisher.publish_channel("ExamplesDeployment(Ground).cosine.Y", cosine_value, data.time)
