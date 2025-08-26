@@ -3,7 +3,6 @@
 This script takes in sine.Y values and calculates cosine.Y
 """
 import math
-import traceback
 from fprime_gds.common.handlers import DataHandlerPlugin
 from fprime_gds.plugin.definitions import gds_plugin
 

@@ -33,7 +33,7 @@ In order to run the example application with ground-calculated channels, the use
 cd ExamplesDeployment
 fprime-merge-dictionary --permissive --output MergedDictionary.json \
     ../build-artifacts/Darwin/ExamplesDeployment/dict/ExamplesDeploymentTopologyDictionary.json \
-    ./GroundChannels/GroundDefinedChannelsDictionary.json
+    ../../GdsExamples/gds-plugins/src/ground_channels/GroundDefinedChannelsDictionary.json
 fprime-gds --dictionary ./MergedDictionary.json
 ```
 
