@@ -24,7 +24,7 @@ module ManagerWorker {
         @ Ping output port for response to the ping
         output port pingOut: Svc.Ping
 
-        # Ensure the start and completion ports are wired to the same worker
+        @ Ensure the start and completion ports are wired to the same worker
         match startWorker with doneRecv
 
         # It is good practice to have events that announce when command dispatch has
