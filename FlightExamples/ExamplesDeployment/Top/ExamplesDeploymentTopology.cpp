@@ -111,7 +111,7 @@ void startRateGroups(Fw::TimeInterval interval) {
     // Svc::RateGroupDriver will divide this down to the slower rate groups.
     // This call will block until the stopRateGroups() call is made.
     // For this Linux demo, that call is made from a signal handler.
-    timer.startTimer(interval.getSeconds() * 1000 + interval.getUSeconds() / 1000);
+    timer.startTimer(interval);
 }
 
 void stopRateGroups() {
