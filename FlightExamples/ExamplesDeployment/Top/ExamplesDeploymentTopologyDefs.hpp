@@ -3,34 +3,30 @@
 // \brief required header file containing the required definitions for the topology autocoder
 //
 // ======================================================================
-#ifndef EXAMPLESDEPLOYMENT_EXAMPLESDEPLOYMENTTOPOLOGYDEFS_HPP
-#define EXAMPLESDEPLOYMENT_EXAMPLESDEPLOYMENTTOPOLOGYDEFS_HPP
+#ifndef ExamplesDeployment_ExamplesDeploymentTOPOLOGYDEFS_HPP
+#define ExamplesDeployment_ExamplesDeploymentTOPOLOGYDEFS_HPP
 
-#include "Fw/Types/MallocAllocator.hpp"
+// Subtopology PingEntries includes
+#include "Svc/Subtopologies/CdhCore/PingEntries.hpp"
+// #include "Svc/Subtopologies/DataProducts/PingEntries.hpp"
+#include "Svc/Subtopologies/FileHandling/PingEntries.hpp"
+
+// SubtopologyTopologyDefs includes
+#include "Svc/Subtopologies/CdhCore/SubtopologyTopologyDefs.hpp"
+// #include "Svc/Subtopologies/DataProducts/SubtopologyTopologyDefs.hpp"
+#include "Svc/Subtopologies/FileHandling/SubtopologyTopologyDefs.hpp"
+
+#include "ExternalLibs/Subtopology/ExternalLibsTopologyDefs.hpp"
+#include "ManagerWorker/Subtopology/ManagerWorkerTopologyDefs.hpp"
+
+// Include autocoded FPP constants
 #include "ExamplesDeployment/Top/FppConstantsAc.hpp"
-#include "Svc/FramingProtocol/FprimeProtocol.hpp"
-#include "Svc/Health/Health.hpp"
+#include "ExamplesDeployment/Top/Ports_ComBufferQueueEnumAc.hpp"
+#include "ExamplesDeployment/Top/Ports_ComPacketQueueEnumAc.hpp"
 
-// Subtopology includes
-#include <ManagerWorker/Subtopology/ManagerWorkerTopologyDefs.hpp>
-#include <ExternalLibs/Subtopology/ExternalLibsTopologyDefs.hpp>
-
-// Definitions are placed within a namespace named after the deployment
-namespace ExamplesDeployment {
-
-/**
- * \brief required type definition to carry state
- *
- * The topology autocoder requires an object that carries state with the name `ExamplesDeployment::TopologyState`. Only the type
- * definition is required by the autocoder and the contents of this object are otherwise opaque to the autocoder. The contents are entirely up
- * to the definition of the project. Here, they are derived from command line inputs.
- */
-struct TopologyState {
-    const CHAR* hostname;
-    U16 port;
-    ManagerWorker::ManagerWorkerState ManagerWorker_state;
-    ExternalLibs::ExternalLibsState ExternalLibs_state;
-};
+// Include required headers for phased code
+#include "Fw/Time/TimeInterval.hpp"
+#include "Svc/FrameAccumulator/FrameDetector/FprimeFrameDetector.hpp"
 
 /**
  * \brief required ping constants
@@ -51,38 +47,7 @@ struct TopologyState {
  * }
  * ```
  */
-namespace PingEntries = GlobalDefs::PingEntries;
-} // namespace ExamplesDeployment
-
-namespace GlobalDefs {
 namespace PingEntries {
-namespace ExamplesDeployment_blockDrv {
-enum { WARN = 3, FATAL = 5 };
-}
-namespace ExamplesDeployment_tlmSend {
-enum { WARN = 3, FATAL = 5 };
-}
-namespace ExamplesDeployment_cmdDisp {
-enum { WARN = 3, FATAL = 5 };
-}
-namespace ExamplesDeployment_cmdSeq {
-enum { WARN = 3, FATAL = 5 };
-}
-namespace ExamplesDeployment_eventLogger {
-enum { WARN = 3, FATAL = 5 };
-}
-namespace ExamplesDeployment_fileDownlink {
-enum { WARN = 3, FATAL = 5 };
-}
-namespace ExamplesDeployment_fileManager {
-enum { WARN = 3, FATAL = 5 };
-}
-namespace ExamplesDeployment_fileUplink {
-enum { WARN = 3, FATAL = 5 };
-}
-namespace ExamplesDeployment_prmDb {
-enum { WARN = 3, FATAL = 5 };
-}
 namespace ExamplesDeployment_rateGroup1 {
 enum { WARN = 3, FATAL = 5 };
 }
@@ -92,6 +57,28 @@ enum { WARN = 3, FATAL = 5 };
 namespace ExamplesDeployment_rateGroup3 {
 enum { WARN = 3, FATAL = 5 };
 }
+namespace ExamplesDeployment_cmdSeq {
+enum { WARN = 3, FATAL = 5 };
+}
 }  // namespace PingEntries
-}  // namespace GlobalDefs
+
+// Definitions are placed within a namespace named after the deployment
+namespace ExamplesDeployment {
+
+/**
+ * \brief required type definition to carry state
+ *
+ * The topology autocoder requires an object that carries state with the name `ExamplesDeployment::TopologyState`. Only
+ * the type definition is required by the autocoder and the contents of this object are otherwise opaque to the
+ * autocoder. The contents are entirely up to the definition of the project. This deployment uses subtopologies.
+ */
+struct TopologyState {
+    const char* hostname;                         //!< Hostname for TCP communication
+    U16 port;                                     //!< Port for TCP communication
+    CdhCore::SubtopologyState cdhCore;            //!< Subtopology state for CdhCore
+    FileHandling::SubtopologyState fileHandling;  //!< Subtopology state for FileHandling
+};
+
+namespace PingEntries = ::PingEntries;
+}  // namespace ExamplesDeployment
 #endif

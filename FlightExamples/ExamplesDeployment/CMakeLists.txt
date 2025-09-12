@@ -11,6 +11,7 @@
 # Topology and Components
 ###
 add_fprime_subdirectory("${CMAKE_CURRENT_LIST_DIR}/Sine/")
+add_fprime_subdirectory("${CMAKE_CURRENT_LIST_DIR}/ExampleCdhCoreConfig/")
 add_fprime_subdirectory("${CMAKE_CURRENT_LIST_DIR}/Top/")
 
 register_fprime_deployment(
