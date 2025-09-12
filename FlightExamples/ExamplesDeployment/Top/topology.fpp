@@ -41,6 +41,7 @@ module ExamplesDeployment {
     instance rateGroup3
     instance rateGroupDriver
     instance systemResources
+    instance sine
     instance timer
     instance comDriver
     instance cmdSeq
@@ -144,22 +145,20 @@ module ExamplesDeployment {
 
       # Rate group 1
       rateGroupDriver.CycleOut[Ports_RateGroups.rateGroup1] -> rateGroup1.CycleIn
-      rateGroup1.RateGroupMemberOut[0] -> CdhCore.tlmSend.Run
-      rateGroup1.RateGroupMemberOut[1] -> FileHandling.fileDownlink.Run
-      rateGroup1.RateGroupMemberOut[2] -> systemResources.run
-      rateGroup1.RateGroupMemberOut[3] -> comQueue.run
+      rateGroup1.RateGroupMemberOut[0] -> cmdSeq.schedIn
+      rateGroup1.RateGroupMemberOut[1] -> sine.run
+      rateGroup1.RateGroupMemberOut[2] -> CdhCore.tlmSend.Run
+      rateGroup1.RateGroupMemberOut[3] -> FileHandling.fileDownlink.Run
+      rateGroup1.RateGroupMemberOut[4] -> comQueue.run
 
       # Rate group 2
       rateGroupDriver.CycleOut[Ports_RateGroups.rateGroup2] -> rateGroup2.CycleIn
-      rateGroup2.RateGroupMemberOut[0] -> cmdSeq.schedIn
+      rateGroup2.RateGroupMemberOut[1] -> systemResources.run
 
       # Rate group 3
       rateGroupDriver.CycleOut[Ports_RateGroups.rateGroup3] -> rateGroup3.CycleIn
       rateGroup3.RateGroupMemberOut[0] -> CdhCore.$health.Run
       rateGroup3.RateGroupMemberOut[1] -> commsBufferManager.schedIn
-      # rateGroup3.RateGroupMemberOut[2] -> DataProducts.dpBufferManager.schedIn
-      # rateGroup3.RateGroupMemberOut[3] -> DataProducts.dpWriter.schedIn
-      # rateGroup3.RateGroupMemberOut[4] -> DataProducts.dpMgr.schedIn
     }
 
     connections CdhCore_cmdSeq {

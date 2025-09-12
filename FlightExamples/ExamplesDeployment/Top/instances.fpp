@@ -82,4 +82,6 @@ module ExamplesDeployment {
 
   instance comStub: Svc.ComStub base id 0x1001A000
 
+  instance sine: ExamplesDeployment.Sine base id 0x4F00
+
 }

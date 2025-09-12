@@ -88,7 +88,7 @@ int main(int argc, char* argv[]) {
 
     // Setup, cycle, and teardown topology
     ExamplesDeployment::setupTopology(inputs);
-    ExamplesDeployment::startRateGroups(Fw::TimeInterval(1, 0));  // Program loop cycling rate groups at 1Hz
+    ExamplesDeployment::startRateGroups(Fw::TimeInterval(0, 1000));  // Program loop cycling rate groups at 1000Hz
     ExamplesDeployment::teardownTopology(inputs);
     (void)printf("Exiting...\n");
     return 0;

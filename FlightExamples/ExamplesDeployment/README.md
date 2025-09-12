@@ -25,6 +25,22 @@ cd ExamplesDeployment
 fprime-gds
 ```
 
+## Running the application with Ground-Calculated Channels
+
+In order to run the example application with ground-calculated channels, the user must generate the combined dictionary and run the GDS with it.
+
+```
+cd ExamplesDeployment
+fprime-merge-dictionary --permissive --output MergedDictionary.json \
+    ../build-artifacts/Darwin/ExamplesDeployment/dict/ExamplesDeploymentTopologyDictionary.json \
+    ../../GdsExamples/gds-plugins/src/ground_channels/GroundDefinedChannelsDictionary.json
+fprime-gds --dictionary ./MergedDictionary.json
+```
+
+> [!NOTE]
+> Ground-calculated channels only works with the `--no-zmq` option.
+
+## Running the example Tests
 
 To run the ground system without starting the ExamplesDeployment app:
 ```
@@ -36,30 +52,6 @@ fprime-gds --no-app
 The application binary may then be run independently from the created 'bin' directory.
 
 ```
-cd ExamplesDeployment/build-artifacts/<platform>/bin/
-./ExamplesDeployment -a 127.0.0.1 -p 50000
+cd ..
+pytest
 ```
-
-
-## This deployment uses F' **core subtopologies** for a modular, reusable architecture:
-
-- **CdhCore**: Command & Data Handling
-  - Command dispatching and event management
-  - Event logging and telemetry collection  
-  - Health monitoring system
-  - Fatal error handling
-
-- **ComCcsds**: CCSDS Communication Subsystem
-  - CCSDS protocol implementation
-  - Uplink/downlink data handling
-  - Frame processing and routing
-
-- **FileHandling**: File Transfer & Command Sequencing
-  - File upload and download services
-  - Parameter database management
-  - File system operations
-
-- **DataProducts**: Data Product Management
-  - Data product cataloging
-  - Storage and retrieval capabilities
-  - Product metadata management

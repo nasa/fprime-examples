@@ -68,27 +68,9 @@ telemetry packets ExamplesDeploymentPackets {
     ExamplesDeployment.systemResources.CPU_15
   }
 
-  # packet DataProducts id 21 group 3 {
-  #   DataProducts.dpCat.CatalogDps
-  #   DataProducts.dpCat.DpsSent
-
-  #   DataProducts.dpMgr.NumSuccessfulAllocations
-  #   DataProducts.dpMgr.NumFailedAllocations
-  #   DataProducts.dpMgr.NumDataProducts
-  #   DataProducts.dpMgr.NumBytes
-
-  #   DataProducts.dpWriter.NumBuffersReceived
-  #   DataProducts.dpWriter.NumBytesWritten
-  #   DataProducts.dpWriter.NumSuccessfulWrites
-  #   DataProducts.dpWriter.NumFailedWrites
-  #   DataProducts.dpWriter.NumErrors
-
-  #   DataProducts.dpBufferManager.TotalBuffs
-  #   DataProducts.dpBufferManager.CurrBuffs
-  #   DataProducts.dpBufferManager.HiBuffs
-  #   DataProducts.dpBufferManager.NoBuffs
-  #   DataProducts.dpBufferManager.EmptyBuffs
-  # }
+  packet Sine id 21 group 3 {
+    sine.Y
+  }
 
   packet Version1 id 22 group 2 {
     CdhCore.version.FrameworkVersion
