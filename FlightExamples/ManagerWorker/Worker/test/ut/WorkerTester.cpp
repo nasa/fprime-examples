@@ -18,7 +18,9 @@ WorkerTester ::WorkerTester() : WorkerGTestBase("WorkerTester", WorkerTester::MA
     this->connectPorts();
 }
 
-WorkerTester ::~WorkerTester() {}
+WorkerTester ::~WorkerTester() {
+   this->component.deinit();
+}
 
 // ----------------------------------------------------------------------
 // Tests

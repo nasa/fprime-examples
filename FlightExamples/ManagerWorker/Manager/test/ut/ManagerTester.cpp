@@ -19,7 +19,9 @@ ManagerTester ::ManagerTester()
     this->connectPorts();
 }
 
-ManagerTester ::~ManagerTester() {}
+ManagerTester ::~ManagerTester() {
+    this->component.deinit();
+}
 
 // ----------------------------------------------------------------------
 // Tests
