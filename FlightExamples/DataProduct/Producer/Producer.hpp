@@ -4,12 +4,12 @@
 // \brief  hpp file for Producer component implementation class
 // ======================================================================
 
-#ifndef DataProducts_Producer_HPP
-#define DataProducts_Producer_HPP
+#ifndef DataProduct_Producer_HPP
+#define DataProduct_Producer_HPP
 
-#include "DataProducts/Producer/ProducerComponentAc.hpp"
+#include "DataProduct/Producer/ProducerComponentAc.hpp"
 
-namespace DataProducts {
+namespace DataProduct {
 
 class Producer final : public ProducerComponentBase {
   public:
@@ -43,6 +43,6 @@ class Producer final : public ProducerComponentBase {
     bool m_containerValid;    //!< Whether the container is valid
 };
 
-}  // namespace DataProducts
+}  // namespace DataProduct
 
 #endif

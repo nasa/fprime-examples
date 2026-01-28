@@ -4,13 +4,13 @@
 // \brief  hpp file for Producer component test harness implementation class
 // ======================================================================
 
-#ifndef DataProducts_ProducerTester_HPP
-#define DataProducts_ProducerTester_HPP
+#ifndef DataProduct_ProducerTester_HPP
+#define DataProduct_ProducerTester_HPP
 
-#include "DataProducts/Producer/Producer.hpp"
-#include "DataProducts/Producer/ProducerGTestBase.hpp"
+#include "DataProduct/Producer/Producer.hpp"
+#include "DataProduct/Producer/ProducerGTestBase.hpp"
 
-namespace DataProducts {
+namespace DataProduct {
 
 class ProducerTester final : public ProducerGTestBase {
   public:
@@ -69,13 +69,13 @@ class ProducerTester final : public ProducerGTestBase {
     //! Size of buffer for productGet handler
     constexpr static FwSizeType BUFFER_SIZE =
         Fw::DpContainer::MIN_PACKET_SIZE +
-        (2 * (DataProducts::SinusoidRecord::SERIALIZED_SIZE + sizeof(FwDpIdType)) * Producer::RECORD_COUNT);
+        (2 * (SinusoidRecordType::SERIALIZED_SIZE + sizeof(FwDpIdType)) * Producer::RECORD_COUNT);
     //! Buffer for productGet handler
     U8 m_buffer[BUFFER_SIZE];
 
     bool m_allocation_failure = false;  //!< Whether to simulate allocation failure
 };
 
-}  // namespace DataProducts
+}  // namespace DataProduct
 
 #endif

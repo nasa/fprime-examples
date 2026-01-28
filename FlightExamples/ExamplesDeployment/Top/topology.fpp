@@ -25,7 +25,7 @@ module ExamplesDeployment {
   # Subtopology imports
   # ----------------------------------------------------------------------
     import CdhCore.Subtopology
-    # import DataProducts.Subtopology
+    import DataProducts.Subtopology
     import FileHandling.Subtopology
 
     # Project-defined
@@ -52,6 +52,7 @@ module ExamplesDeployment {
     instance framer
     instance fprimeRouter
     instance comStub
+    instance dpProducer
 
   # ----------------------------------------------------------------------
   # Pattern graph specifiers
@@ -165,6 +166,18 @@ module ExamplesDeployment {
       # Command Sequencer
       cmdSeq.comCmdOut -> CdhCore.cmdDisp.seqCmdBuff
       CdhCore.cmdDisp.seqCmdStatus -> cmdSeq.cmdResponseIn
+    }
+
+    connections FileHandling_DataProducts{
+        DataProducts.dpCat.fileOut             -> FileHandling.fileDownlink.SendFile
+        FileHandling.fileDownlink.FileComplete -> DataProducts.dpCat.fileDone
+    }
+
+    # DataProducts pattern connections
+    connections DataProducts {
+        dpProducer.productGetOut  -> DataProducts.dpMgr.productGetIn
+        dpProducer.productSendOut -> DataProducts.dpMgr.productSendIn
+        rateGroup1.RateGroupMemberOut[5] -> dpProducer.run
     }
 
     connections ExamplesDeployment {

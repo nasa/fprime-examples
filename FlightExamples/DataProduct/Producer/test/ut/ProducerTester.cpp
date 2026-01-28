@@ -6,7 +6,7 @@
 
 #include "ProducerTester.hpp"
 
-namespace DataProducts {
+namespace DataProduct {
 
 // ----------------------------------------------------------------------
 // Construction and destruction
@@ -88,4 +88,4 @@ Fw::Success::T ProducerTester ::productGet_handler(FwDpIdType id, FwSizeType dat
     return (this->m_allocation_failure) ? Fw::Success::FAILURE : Fw::Success::SUCCESS;
 }
 
-}  // namespace DataProducts
+}  // namespace DataProduct

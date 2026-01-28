@@ -1,6 +1,6 @@
-module DataProducts {
+module DataProduct {
     @ Record structure for sinusoidal data storing the timestamp and value
-    struct SinusoidRecord {
+    struct SinusoidRecordType {
         timeTag: Fw.TimeValue
         value: F32
     }
@@ -11,10 +11,10 @@ module DataProducts {
         sync input port run: Svc.Sched
 
         @ Data product record for sine wave
-        product record SineRecord: SinusoidRecord id 0
+        product record SineRecord: SinusoidRecordType id 0
 
         @ Data product record for cosine wave
-        product record CosineRecord: SinusoidRecord id 1
+        product record CosineRecord: SinusoidRecordType id 1
 
         @ Data product container containing samples from both waves
         product container SinusoidContainer id 0 default priority 10

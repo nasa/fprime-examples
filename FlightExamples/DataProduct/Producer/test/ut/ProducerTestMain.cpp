@@ -7,12 +7,12 @@
 #include "ProducerTester.hpp"
 
 TEST(Nominal, Generation) {
-    DataProducts::ProducerTester tester;
+    DataProduct::ProducerTester tester;
     tester.test_data_product_generation();
 }
 
 TEST(OffNominal, AllocationFailure) {
-    DataProducts::ProducerTester tester;
+    DataProduct::ProducerTester tester;
     tester.test_data_failed_allocate();
 }
 

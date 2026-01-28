@@ -8,12 +8,12 @@
 
 // Subtopology PingEntries includes
 #include "Svc/Subtopologies/CdhCore/PingEntries.hpp"
-// #include "Svc/Subtopologies/DataProducts/PingEntries.hpp"
+#include "Svc/Subtopologies/DataProducts/PingEntries.hpp"
 #include "Svc/Subtopologies/FileHandling/PingEntries.hpp"
 
 // SubtopologyTopologyDefs includes
 #include "Svc/Subtopologies/CdhCore/SubtopologyTopologyDefs.hpp"
-// #include "Svc/Subtopologies/DataProducts/SubtopologyTopologyDefs.hpp"
+#include "Svc/Subtopologies/DataProducts/SubtopologyTopologyDefs.hpp"
 #include "Svc/Subtopologies/FileHandling/SubtopologyTopologyDefs.hpp"
 
 #include "ExternalLibs/Subtopology/ExternalLibsTopologyDefs.hpp"
