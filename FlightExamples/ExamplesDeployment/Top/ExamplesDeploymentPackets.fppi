@@ -19,7 +19,8 @@ telemetry packets ExamplesDeploymentPackets {
     ExamplesDeployment.commsBufferManager.TotalBuffs
     ExamplesDeployment.commsBufferManager.CurrBuffs
     ExamplesDeployment.commsBufferManager.HiBuffs
-    CdhCore.tlmSend.SendLevel
+    CdhCore.tlmSend.GroupConfigs
+    CdhCore.tlmSend.SectionEnabled
 
     ExamplesDeployment.rateGroup1.RgMaxTime
     ExamplesDeployment.rateGroup2.RgMaxTime
