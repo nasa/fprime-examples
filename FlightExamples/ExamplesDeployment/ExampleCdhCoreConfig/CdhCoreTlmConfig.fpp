@@ -15,8 +15,8 @@ module CdhCore{
        # This name will need to be updated if wishing to use this in a custom deployment
        phase Fpp.ToCpp.Phases.configComponents """
        CdhCore::tlmSend.setPacketList(
-           ExamplesDeployment::ExamplesDeployment_ExamplesDeploymentPacketsTlmPackets::packetList, 
-           ExamplesDeployment::ExamplesDeployment_ExamplesDeploymentPacketsTlmPackets::omittedChannels, 
+           ExamplesDeployment::ExamplesDeployment_PacketsTlmPackets::packetList, 
+           ExamplesDeployment::ExamplesDeployment_PacketsTlmPackets::omittedChannels, 
            1
        );
        """

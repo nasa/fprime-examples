@@ -109,9 +109,6 @@ module ExamplesDeployment {
         # Deframer <-> Router
         deframer.dataOut           -> fprimeRouter.dataIn
         fprimeRouter.dataReturnOut -> deframer.dataReturnIn
-        # Router buffer allocations
-        fprimeRouter.bufferAllocate   -> commsBufferManager.bufferGetCallee
-        fprimeRouter.bufferDeallocate -> commsBufferManager.bufferSendIn
         # Router <-> Command Dispatcher
         fprimeRouter.commandOut -> CdhCore.cmdDisp.seqCmdBuff
         CdhCore.cmdDisp.seqCmdStatus -> fprimeRouter.cmdResponseIn
