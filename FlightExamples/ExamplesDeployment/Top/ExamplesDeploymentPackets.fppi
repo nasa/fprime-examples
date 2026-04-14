@@ -1,4 +1,4 @@
-telemetry packets ackets {
+telemetry packets Packets {
 
   packet CDH id 1 group 1 {
     CdhCore.cmdDisp.CommandsDispatched

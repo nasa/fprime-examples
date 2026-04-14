@@ -6,7 +6,7 @@
 // Provides access to autocoded functions
 #include <ExamplesDeployment/Top/ExamplesDeploymentTopologyAc.hpp>
 // Note: Uncomment when using Svc:TlmPacketizer
-#include <ExamplesDeployment/Top/ExamplesDeployment_ExamplesDeploymentPacketsTlmPacketsAc.hpp>
+#include <ExamplesDeployment/Top/ExamplesDeployment_PacketsTlmPacketsAc.hpp>
 
 // Necessary project-specified types
 #include <CustomFraming/DecafFrameDetector/DecafFrameDetector.hpp>
