@@ -1,4 +1,4 @@
-telemetry packets ExamplesDeploymentPackets {
+telemetry packets ackets {
 
   packet CDH id 1 group 1 {
     CdhCore.cmdDisp.CommandsDispatched
@@ -10,21 +10,21 @@ telemetry packets ExamplesDeploymentPackets {
     FileHandling.fileDownlink.PacketsSent
     FileHandling.fileManager.CommandsExecuted
 
-    ExamplesDeployment.cmdSeq.CS_LoadCommands
-    ExamplesDeployment.cmdSeq.CS_CancelCommands
-    ExamplesDeployment.cmdSeq.CS_CommandsExecuted
-    ExamplesDeployment.cmdSeq.CS_SequencesCompleted
-    ExamplesDeployment.comQueue.comQueueDepth
-    ExamplesDeployment.comQueue.buffQueueDepth
-    ExamplesDeployment.commsBufferManager.TotalBuffs
-    ExamplesDeployment.commsBufferManager.CurrBuffs
-    ExamplesDeployment.commsBufferManager.HiBuffs
+    cmdSeq.CS_LoadCommands
+    cmdSeq.CS_CancelCommands
+    cmdSeq.CS_CommandsExecuted
+    cmdSeq.CS_SequencesCompleted
+    comQueue.comQueueDepth
+    comQueue.buffQueueDepth
+    commsBufferManager.TotalBuffs
+    commsBufferManager.CurrBuffs
+    commsBufferManager.HiBuffs
     CdhCore.tlmSend.GroupConfigs
     CdhCore.tlmSend.SectionEnabled
 
-    ExamplesDeployment.rateGroup1.RgMaxTime
-    ExamplesDeployment.rateGroup2.RgMaxTime
-    ExamplesDeployment.rateGroup3.RgMaxTime
+    rateGroup1.RgMaxTime
+    rateGroup2.RgMaxTime
+    rateGroup3.RgMaxTime
   }
 
   packet CDHErrors id 2 group 1 {
@@ -34,40 +34,40 @@ telemetry packets ExamplesDeploymentPackets {
     FileHandling.fileDownlink.Warnings
     FileHandling.fileManager.Errors
 
-    ExamplesDeployment.cmdSeq.CS_Errors
-    ExamplesDeployment.commsBufferManager.NoBuffs
-    ExamplesDeployment.commsBufferManager.EmptyBuffs
+    cmdSeq.CS_Errors
+    commsBufferManager.NoBuffs
+    commsBufferManager.EmptyBuffs
 
-    ExamplesDeployment.rateGroup1.RgCycleSlips
-    ExamplesDeployment.rateGroup2.RgCycleSlips
-    ExamplesDeployment.rateGroup3.RgCycleSlips
+    rateGroup1.RgCycleSlips
+    rateGroup2.RgCycleSlips
+    rateGroup3.RgCycleSlips
   }
 
   packet SystemRes1 id 5 group 2 {
-    ExamplesDeployment.systemResources.MEMORY_TOTAL
-    ExamplesDeployment.systemResources.MEMORY_USED
-    ExamplesDeployment.systemResources.NON_VOLATILE_TOTAL
-    ExamplesDeployment.systemResources.NON_VOLATILE_FREE
+    systemResources.MEMORY_TOTAL
+    systemResources.MEMORY_USED
+    systemResources.NON_VOLATILE_TOTAL
+    systemResources.NON_VOLATILE_FREE
   }
 
   packet SystemRes3 id 6 group 2 {
-    ExamplesDeployment.systemResources.CPU
-    ExamplesDeployment.systemResources.CPU_00
-    ExamplesDeployment.systemResources.CPU_01
-    ExamplesDeployment.systemResources.CPU_02
-    ExamplesDeployment.systemResources.CPU_03
-    ExamplesDeployment.systemResources.CPU_04
-    ExamplesDeployment.systemResources.CPU_05
-    ExamplesDeployment.systemResources.CPU_06
-    ExamplesDeployment.systemResources.CPU_07
-    ExamplesDeployment.systemResources.CPU_08
-    ExamplesDeployment.systemResources.CPU_09
-    ExamplesDeployment.systemResources.CPU_10
-    ExamplesDeployment.systemResources.CPU_11
-    ExamplesDeployment.systemResources.CPU_12
-    ExamplesDeployment.systemResources.CPU_13
-    ExamplesDeployment.systemResources.CPU_14
-    ExamplesDeployment.systemResources.CPU_15
+    systemResources.CPU
+    systemResources.CPU_00
+    systemResources.CPU_01
+    systemResources.CPU_02
+    systemResources.CPU_03
+    systemResources.CPU_04
+    systemResources.CPU_05
+    systemResources.CPU_06
+    systemResources.CPU_07
+    systemResources.CPU_08
+    systemResources.CPU_09
+    systemResources.CPU_10
+    systemResources.CPU_11
+    systemResources.CPU_12
+    systemResources.CPU_13
+    systemResources.CPU_14
+    systemResources.CPU_15
   }
 
   packet DataProducts id 20 group 3 {
