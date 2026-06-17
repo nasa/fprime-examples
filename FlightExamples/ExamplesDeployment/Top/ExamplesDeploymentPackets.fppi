@@ -90,6 +90,8 @@ telemetry packets Packets {
     DataProducts.dpBufferManager.HiBuffs
     DataProducts.dpBufferManager.NoBuffs
     DataProducts.dpBufferManager.EmptyBuffs
+
+    DataProducts.dpBufferAccumulator.BA_NumQueuedBuffers
   }
 
   packet Sine id 21 group 3 {
