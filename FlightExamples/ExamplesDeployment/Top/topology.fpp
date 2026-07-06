@@ -157,6 +157,7 @@ module ExamplesDeployment {
       rateGroupDriver.CycleOut[Ports_RateGroups.rateGroup3] -> rateGroup3.CycleIn
       rateGroup3.RateGroupMemberOut[0] -> CdhCore.$health.Run
       rateGroup3.RateGroupMemberOut[1] -> commsBufferManager.schedIn
+      rateGroup3.RateGroupMemberOut[2] -> CdhCore.Subtopology.eventsRun
     }
 
     connections CdhCore_cmdSeq {
