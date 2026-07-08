@@ -65,7 +65,7 @@ ExternalLibs::DecryptStatus OpenSslWrapper ::aesEncryptIn_handler(FwIndexType po
 
 void OpenSslWrapper ::REGISTER_AES_KEY_cmdHandler(FwOpcodeType opCode,  //!< The opcode
                                                   U32 cmdSeq,           //!< The command sequence number
-                                                  ExternalLibs::AesKeyType key) {
+                                                  const ExternalLibs::AesKeyType& key) {
     this->registerAesKey(key);
     this->cmdResponse_out(opCode, cmdSeq, Fw::CmdResponse::OK);
 }

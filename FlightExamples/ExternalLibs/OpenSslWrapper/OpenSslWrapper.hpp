@@ -65,7 +65,7 @@ class OpenSslWrapper : public OpenSslWrapperComponentBase {
     //! Register a new symmetric key with Security Association (SA) sa_id
     void REGISTER_AES_KEY_cmdHandler(FwOpcodeType opCode,  //!< The opcode
                                      U32 cmdSeq,           //!< The command sequence number
-                                     ExternalLibs::AesKeyType key) override;
+                                     const ExternalLibs::AesKeyType& key) override;
 
     //! Handler implementation for command DEREGISTER_AES_KEY
     //!
