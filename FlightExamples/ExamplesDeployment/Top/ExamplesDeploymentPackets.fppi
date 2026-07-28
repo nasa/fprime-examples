@@ -171,4 +171,5 @@ telemetry packets Packets {
 
 } omit {
   CdhCore.cmdDisp.CommandErrors
+  ExamplesDeployment.cmdSeq.CS_CurrentSequence
 }
