@@ -97,11 +97,10 @@ void DecafDeframer ::dataIn_handler(FwIndexType portNum, Fw::Buffer& data, const
     }
 
     // ---------------- Extract payload from frame ----------------
-    // Shift data pointer to effectively remove the header
-    data.setData(data.getData() + CustomFraming::Types::FrameHeader::SERIALIZED_SIZE);
-    // Shrink size to effectively remove the trailer (also removes the header)
-    data.setSize(data.getSize() - CustomFraming::Types::FrameHeader::SERIALIZED_SIZE -
-                 CustomFraming::Types::FrameTrailer::SERIALIZED_SIZE);
+    // Advance past the header (adjusts size accordingly)
+    data.advance(CustomFraming::Types::FrameHeader::SERIALIZED_SIZE);
+    // Shrink size to effectively remove the trailer
+    data.setSize(data.getSize() - CustomFraming::Types::FrameTrailer::SERIALIZED_SIZE);
     // Emit the deframed data with updated APID in context
     this->dataOut_out(0, data, contextCopy);
 }
