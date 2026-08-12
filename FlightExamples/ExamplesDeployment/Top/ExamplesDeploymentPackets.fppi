@@ -5,6 +5,7 @@ telemetry packets Packets {
     CdhCore.cmdDisp.CommandsDropped
 
     FileHandling.fileUplink.FilesReceived
+    FileHandling.fileUplink.FilesReceivedFailed
     FileHandling.fileUplink.PacketsReceived
     FileHandling.fileDownlink.FilesSent
     FileHandling.fileDownlink.PacketsSent
