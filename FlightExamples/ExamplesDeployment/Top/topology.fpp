@@ -19,7 +19,7 @@ module ExamplesDeployment {
       FILE
   };
 
-  topology ExamplesDeployment {
+  deployment topology ExamplesDeployment {
 
   # ----------------------------------------------------------------------
   # Subtopology imports
