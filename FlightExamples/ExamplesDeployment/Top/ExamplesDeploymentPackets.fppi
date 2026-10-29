@@ -39,6 +39,10 @@ telemetry packets Packets {
     cmdSeq.CS_Errors
     commsBufferManager.NoBuffs
     commsBufferManager.EmptyBuffs
+    comQueue.comIngressDropped
+    comQueue.buffIngressDropped
+    comQueue.comManagedDropped
+    comQueue.buffManagedDropped
 
     rateGroup1.RgCycleSlips
     rateGroup2.RgCycleSlips
