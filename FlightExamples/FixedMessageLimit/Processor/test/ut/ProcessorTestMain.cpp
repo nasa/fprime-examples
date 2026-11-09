@@ -30,6 +30,11 @@ TEST(Command, SetProcessingTime) {
     tester.test_set_processing_time();
 }
 
+TEST(Limit, SkipEventThrottle) {
+    FixedMessageLimit::ProcessorTester tester;
+    tester.test_skip_event_throttle();
+}
+
 int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();

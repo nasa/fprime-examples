@@ -132,6 +132,24 @@ void ProcessorTester::test_set_processing_time() {
     ASSERT_TLM_TicksProcessed(0, 1);
 }
 
+void ProcessorTester::test_skip_event_throttle() {
+    // Skips beyond the throttle emit no further TickSkipped events
+    const FwSizeType skips = Processor::EVENTID_TICKSKIPPED_THROTTLE + 2;
+    this->tick(FixedMessageLimit::MAX_PENDING + skips);
+    ASSERT_EVENTS_TickSkipped_SIZE(Processor::EVENTID_TICKSKIPPED_THROTTLE);
+    this->dispatch(FixedMessageLimit::MAX_PENDING);
+    ASSERT_TLM_TicksSkipped(FixedMessageLimit::MAX_PENDING - 1, static_cast<U32>(skips));
+    // Setting a processing time clears the throttle so the next skip is reported again
+    this->clearHistory();
+    this->sendCmd_SET_PROCESSING_TIME(0, 1, 0);
+    this->dispatch(1);
+    ASSERT_CMD_RESPONSE(0, Processor::OPCODE_SET_PROCESSING_TIME, 1, Fw::CmdResponse::OK);
+    this->tick(FixedMessageLimit::MAX_PENDING + 1);
+    ASSERT_EVENTS_TickSkipped_SIZE(1);
+    ASSERT_EVENTS_TickSkipped(0, FixedMessageLimit::MAX_PENDING);
+    this->dispatch(FixedMessageLimit::MAX_PENDING);
+}
+
 // ----------------------------------------------------------------------
 // Helper functions
 // ----------------------------------------------------------------------

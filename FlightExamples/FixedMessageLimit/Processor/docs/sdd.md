@@ -1,7 +1,7 @@
 # FixedMessageLimit::Processor
 
 An active component demonstrating the
-[Fixed Message Limit pattern](https://fprime.jpl.nasa.gov/latest/docs/user-manual/design-patterns/fixed-message-limit/):
+[Fixed Message Limit pattern](https://github.com/nasa/fprime/blob/devel/docs/user-manual/design-patterns/fixed-message-limit.md):
 a repeating input (here the rate group tick on `schedIn`) is admitted onto the component queue at most
 `FixedMessageLimit.MAX_PENDING` times. Ticks that arrive while `MAX_PENDING` ticks are already pending are skipped on the
 rate group thread rather than queued, so the component's backlog of tick work is bounded regardless of how far behind it
@@ -65,5 +65,6 @@ With `fixedLimitProcessor` on the 1 Hz rate group in `ExamplesDeployment`:
    arrive every second, so the backlog grows until `MAX_PENDING` ticks are pending.
 2. Within a few seconds `TickSkipped` events report `pending = 3` and `TicksSkipped` climbs, while `TicksProcessed`
    continues to advance at the processing rate: the component is behind but its backlog is capped.
-3. Send `SET_PROCESSING_TIME` with `milliseconds = 0`. The queue drains, `TickSkipped` stops, and every tick is
-   processed again.
+3. Send `SET_PROCESSING_TIME` with `milliseconds = 0`. The command is itself queued behind the pending slow ticks, so
+   its response and `ProcessingTimeSet` arrive up to `MAX_PENDING` processing times later (about 7.5 s here). The queue
+   then drains, `TickSkipped` stops, and every tick is processed again.

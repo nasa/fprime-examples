@@ -57,6 +57,9 @@ class ProcessorTester : public ProcessorGTestBase {
     //! Test: SET_PROCESSING_TIME accepts values up to the maximum and rejects larger ones
     void test_set_processing_time();
 
+    //! TickSkipped is throttled and the throttle is cleared by SET_PROCESSING_TIME
+    void test_skip_event_throttle();
+
   private:
     // ----------------------------------------------------------------------
     // Helper functions
