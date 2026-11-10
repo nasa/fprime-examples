@@ -53,6 +53,7 @@ module ExamplesDeployment {
     instance fprimeRouter
     instance comStub
     instance dpProducer
+    instance fixedLimitProcessor
 
   # ----------------------------------------------------------------------
   # Pattern graph specifiers
@@ -176,6 +177,11 @@ module ExamplesDeployment {
         dpProducer.productGetOut  -> DataProducts.dpMgr.productGetIn
         dpProducer.productSendOut -> DataProducts.dpMgr.productSendIn
         rateGroup1.RateGroupMemberOut[5] -> dpProducer.run
+    }
+
+    # FixedMessageLimit pattern connections
+    connections FixedMessageLimit {
+        rateGroup2.RateGroupMemberOut[2] -> fixedLimitProcessor.schedIn
     }
 
     connections ExamplesDeployment {

@@ -51,6 +51,11 @@ module ExamplesDeployment {
       stack size Default.STACK_SIZE \
       priority 101
 
+  instance fixedLimitProcessor: FixedMessageLimit.Processor base id 0x1001D000 \
+    queue size Default.QUEUE_SIZE \
+    stack size Default.STACK_SIZE \
+    priority 90
+
   # ----------------------------------------------------------------------
   # Queued component instances
   # ----------------------------------------------------------------------

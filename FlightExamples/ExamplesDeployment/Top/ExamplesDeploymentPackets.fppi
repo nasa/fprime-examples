@@ -104,6 +104,12 @@ telemetry packets Packets {
     sine.Y
   }
 
+  packet FixedMessageLimit id 38 group 3 {
+    fixedLimitProcessor.TicksAdmitted
+    fixedLimitProcessor.TicksSkipped
+    fixedLimitProcessor.TicksProcessed
+  }
+
   packet Version1 id 22 group 2 {
     CdhCore.version.FrameworkVersion
     CdhCore.version.ProjectVersion
