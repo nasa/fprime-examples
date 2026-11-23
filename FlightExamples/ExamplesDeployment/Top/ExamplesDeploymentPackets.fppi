@@ -181,6 +181,8 @@ telemetry packets Packets {
   }
 
 } omit {
+  FileHandling.prmDb.PrmFileLoadStatus
+  FileHandling.prmDb.PrmFileLoadRecords
   CdhCore.version.CustomVersion11
   CdhCore.version.CustomVersion12
   CdhCore.version.CustomVersion13
